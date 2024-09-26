@@ -1,0 +1,319 @@
+"use client";
+
+import SideBar from "@/components/Sidebar";
+import Breadcrumb from "@/components/Breadcrumb";
+import Footer from "@/components/Footer";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { redirect, useRouter } from "next/navigation";
+import Link from "next/link";
+import BackButton from "@/components/BackButton";
+import Select from "react-select";
+import SubmitButton from "@/components/SubmitButton";
+import Swal from "sweetalert2";
+
+export default function EditUser({ params }) {
+  const session = useSession();
+  const router = useRouter();
+  const role = session?.data?.data?.role;
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("");
+  const [tel, setTel] = useState("");
+  const [duty, setDuty] = useState("");
+  const [address, setAddress] = useState("");
+
+  const roles = [
+    { value: "manager", label: "ผู้ดูแลระบบ" },
+    { value: "storager", label: "ผู้ดูแลคลัง" },
+    { value: "tester", label: "ผู้ทดสอบ" },
+    { value: "worker", label: "แรงงาน" },
+  ];
+
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      if (role[0] !== "m") redirect("/");
+    } else if (session?.status === "unauthenticated") {
+      redirect("/");
+    }
+    const fetchData = async () => {
+      const data = await fetchUserData();
+      setUsername(data?.data?.username);
+      setName(data?.data?.name);
+      setSurname(data?.data?.surname);
+      setEmail(data?.data?.email);
+      setGender(data?.data?.gender);
+      setTel(data?.data?.phone);
+      setDuty(data?.data?.role);
+      setAddress(data?.data?.address);
+    };
+    fetchData();
+  }, [session, role]);
+
+  const fetchUserData = async () => {
+    const res = await fetch(
+      process.env.NEXT_PUBLIC_API_URL + `user/${params.userID}`,
+      {
+        method: "GET",
+      }
+    );
+    if (!res.ok) {
+      Swal.fire({
+        icon: "error",
+        title: "ไม่มีข้อมูลผู้ใช้นี้ในระบบ",
+        text: "กลับไปหน้าก่อนหน้า",
+      }).then((result) => {
+        if (result.isConfirmed) router.back();
+      });
+    }
+    return await res.json();
+  };
+
+  const updateUser = async () => {
+    if (!(!name || !surname || !gender || !duty)) {
+      var roleTemp = "----";
+      for (let r of duty) {
+        if (r.value === "manager") roleTemp = "m" + roleTemp.slice(1, 4);
+        else if (r.value === "storager")
+          roleTemp = roleTemp.slice(0, 1) + "s" + roleTemp.slice(2, 4);
+        else if (r.value === "tester")
+          roleTemp = roleTemp.slice(0, 2) + "t" + roleTemp.slice(3, 4);
+        else if (r.value === "worker") roleTemp = roleTemp.slice(0, 3) + "w";
+      }
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + `user/${params.userID}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body:
+            roleTemp === "----"
+              ? JSON.stringify({
+                  username: username,
+                  name: name,
+                  surname: surname,
+                  gender: gender,
+                  phone: tel,
+                  address: address,
+                })
+              : JSON.stringify({
+                  username: username,
+                  name: name,
+                  surname: surname,
+                  gender: gender,
+                  phone: tel,
+                  role: roleTemp,
+                  address: address,
+                }),
+        }
+      );
+      if (!res.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "ตรวจสอบข้อมูลใหม่อีกครั้ง",
+          text: "ชื่อผู้ใช้งานและอีเมล์ไม่สามารถซ้ำกับของที่มีอยู่ได้ และข้อมูลที่จำเป็นต้องกรอกกรอกครบเรียบร้อยแล้ว",
+        });
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "บันทึกข้อมูลเรียบร้อย",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          router.refresh();
+        }, 1500);
+      }
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+    }
+  };
+
+  return (
+    <>
+      <div className="flex w-screen h-screen">
+        <SideBar className="flex w-auto h-auto" />
+        <div className="flex flex-col w-full h-full">
+          <Breadcrumb className="w-auto h-auto" />
+          <div className="flex flex-col bg-white w-full h-full overflow-y-auto whitespace-nowrap place-items-center pt-[50px]">
+            <div className="flex flex-row w-full place-items-center">
+              <div className="flex place-items-center">
+                <Link href="/user" className="ml-20">
+                  <BackButton text="ย้อนกลับ" />
+                </Link>
+                <h2 className="ml-20 text-black text-2xl font-bold font-['Sarabun']">
+                  แก้ไขข้อมูล
+                </h2>
+              </div>
+              <div className="flex w-full place-content-end mr-20">
+                <SubmitButton text="บันทึกการแก้ไข" onClick={updateUser} />
+              </div>
+            </div>
+            <div className="bg-white w-full h-full flex flex-col place-items-center place-content-center">
+              <div className="w-[1000px] h-[700px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
+                <div className="mx-10 my-10 w-[90%] h-[90%] flex flex-col text-black text-xl font-['Sarabun']">
+                  <div className="w-full h-[200px] flex">
+                    <div className="w-full h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          ชื่อผู้ใช้งาน
+                        </h4>
+                        <input
+                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md cursor-not-allowed"
+                          type="text"
+                          value={username}
+                          disabled
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <div className="w-full h-[200px] flex">
+                    <div className="w-1/2 h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          ชื่อจริง<span className="text-red-600">&nbsp;*</span>
+                        </h4>
+                        <input
+                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md"
+                          type="text"
+                          placeholder="ชื่อจริง"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                        />
+                      </label>
+                    </div>
+                    <div className="w-[5%] h-full"></div>
+                    <div className="w-1/2 h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          นามสกุล<span className="text-red-600">&nbsp;*</span>
+                        </h4>
+                        <input
+                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md"
+                          type="text"
+                          placeholder="นามสกุล"
+                          value={surname}
+                          onChange={(e) => setSurname(e.target.value)}
+                          required
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <div className="w-full h-[200px] flex">
+                    <div className="w-1/2 h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          อีเมล์
+                        </h4>
+                        <input
+                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md cursor-not-allowed"
+                          type="email"
+                          placeholder="example@gmail.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          disabled
+                        />
+                      </label>
+                    </div>
+                    <div className="w-[5%] h-full"></div>
+                    <div className="w-1/2 h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          เบอร์โทรศัพท์
+                        </h4>
+                        <input
+                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md"
+                          type="tel"
+                          placeholder="084XXXXXXX"
+                          value={tel}
+                          onChange={(e) => setTel(e.target.value)}
+                          required
+                        />
+                      </label>
+                    </div>
+                  </div>
+                  <div className="w-full h-[200px] flex">
+                    <div className="w-[20%] h-full">
+                      <label>
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          เพศ<span className="text-red-600">&nbsp;*</span>
+                        </h4>
+                        <select
+                          className="h-[50px] w-full pl-5 border border-black mt-1 text-2xl font-normal font-['Sarabun'] rounded-md"
+                          value={gender}
+                          onChange={(e) => {
+                            setGender(e.target.value);
+                          }}
+                        >
+                          <option
+                            value="none"
+                            disabled
+                            hidden
+                            className="text-red-600"
+                          >
+                            เลือกเพศ
+                          </option>
+                          <option value="male">ชาย</option>
+                          <option value="female">หญิง</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div className="w-[5%] h-full"></div>
+                    <div className="w-[75%] h-full">
+                      <label>
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          ตำแหน่ง<span className="text-red-600">&nbsp;*</span>
+                        </h4>
+                        <div className="w-full h-[50px]">
+                          {duty && (
+                            <Select
+                              closeMenuOnSelect={false}
+                              isMulti
+                              options={roles}
+                              onChange={(e) => setDuty(e)}
+                              defaultValue={[
+                                duty[0] === "m" ? roles[0] : null,
+                                duty[1] === "s" ? roles[1] : null,
+                                duty[2] === "t" ? roles[2] : null,
+                                duty[3] === "w" ? roles[3] : null,
+                              ]}
+                            />
+                          )}
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="w-full h-full flex">
+                    <div className="w-full h-full">
+                      <label className="w-auto h-auto">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          ที่อยู่
+                        </h4>
+                        <textarea
+                          className="bg-white border border-black w-full h-[240px] min-h-[50px] max-h-[240px] rounded-lg text-2xl font-normal font-['Sarabun'] px-2 py-2"
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                        ></textarea>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col-reverse place-content-center">
+              <Footer />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
