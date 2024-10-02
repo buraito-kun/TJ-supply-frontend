@@ -10,6 +10,7 @@ import Link from "next/link";
 import Pagination from "@/components/Pagination";
 import Translator from "@/translator";
 import SubmitButton from "@/components/SubmitButton";
+import { Tooltip } from "@nextui-org/tooltip";
 
 export default function Qc() {
   const session = useSession();
@@ -117,52 +118,49 @@ export default function Qc() {
               </div>
             </div>
             <div className="w-full flex flex-col mt-10 pl-10 pr-20">
-              {passPercent && (
-                <div className="flex">
-                  <div
-                    className="flex place-items-center place-content-end"
-                    style={{ width: `${passPercent}%` }}
-                  >
-                    <h3 className="text-black font-normal font-['Sarabun'] text-ellipsis overflow-hidden">
-                      {passPercent}%
-                    </h3>
-                  </div>
-                  <div
-                    className="flex place-items-center place-content-end"
-                    style={{ width: `${inProgressPercent}%` }}
-                  >
-                    <h3 className="text-black font-normal font-['Sarabun'] text-ellipsis overflow-hidden">
-                      {inProgressPercent}%
-                    </h3>
-                  </div>
-                  <div
-                    className="flex place-items-center place-content-end"
-                    style={{ width: `${failPercent}%` }}
-                  >
-                    <h3 className="text-black font-normal font-['Sarabun'] text-ellipsis overflow-hidden">
-                      {failPercent}%
-                    </h3>
-                  </div>
-                </div>
-              )}
+              <div
+                className="flex place-items-center place-content-between"
+              >
+                <h3 className="text-black font-normal font-['Sarabun'] ml-5">
+                  ผลการตรวจสอบโดยรวม
+                </h3>
+              </div>
               <div className="w-full flex border border-black rounded-full bg-gray-200">
                 {passPercent && (
-                  <div
-                    className="h-10 bg-[#13A452] rounded-l-full"
-                    style={{ width: `${passPercent}%` }}
-                  ></div>
+                  <Tooltip
+                    content={`ผ่าน ${passPercent}%`}
+                    showArrow={true}
+                    color="success"
+                  >
+                    <div
+                      className="h-10 bg-[#13A452] rounded-l-full"
+                      style={{ width: `${passPercent}%` }}
+                    ></div>
+                  </Tooltip>
                 )}
                 {inProgressPercent && (
-                  <div
-                    className="h-10 bg-[#ffea8f]"
-                    style={{ width: `${inProgressPercent}%` }}
-                  ></div>
+                  <Tooltip
+                    content={`รอการตรวจสอบ ${inProgressPercent}%`}
+                    showArrow={true}
+                    color="warning"
+                  >
+                    <div
+                      className="h-10 bg-[#ffea8f]"
+                      style={{ width: `${inProgressPercent}%` }}
+                    ></div>
+                  </Tooltip>
                 )}
                 {failPercent && (
-                  <div
-                    className="h-10 bg-[#EE6C4D] rounded-r-full"
-                    style={{ width: `${failPercent}%` }}
-                  ></div>
+                  <Tooltip
+                    content={`ไม่ผ่าน ${failPercent}%`}
+                    showArrow={true}
+                    color="danger"
+                  >
+                    <div
+                      className="h-10 bg-[#EE6C4D] rounded-r-full"
+                      style={{ width: `${failPercent}%` }}
+                    ></div>
+                  </Tooltip>
                 )}
               </div>
             </div>

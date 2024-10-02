@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Pagination from "@/components/Pagination";
 import Translator from "@/translator";
+import { Tooltip } from "@nextui-org/tooltip";
 
 export default function Construct() {
   const session = useSession();
@@ -113,19 +114,22 @@ export default function Construct() {
                   <h3 className="text-black font-normal font-['Sarabun'] ml-5">
                     ความคืบหน้าช่วงเวลานี้
                   </h3>
-                  <h3 className="text-black font-normal font-['Sarabun'] ml-2">
-                    {finishPercent}%
-                  </h3>
                 </div>
               )}
-              <div className="w-full flex border border-black rounded-full bg-gray-200">
-                {finishPercent >= 0 && (
-                  <div
-                    className="h-10 bg-[#13A452] rounded-full"
-                    style={{ width: `${finishPercent}%` }}
-                  ></div>
-                )}
-              </div>
+              <Tooltip
+                content={finishPercent + "%"}
+                showArrow={true}
+                color="success"
+              >
+                <div className="w-full flex border border-black rounded-full bg-gray-200">
+                  {finishPercent >= 0 && (
+                    <div
+                      className="h-10 bg-[#13A452] rounded-full"
+                      style={{ width: `${finishPercent}%` }}
+                    ></div>
+                  )}
+                </div>
+              </Tooltip>
             </div>
             <div className="flex flex-row w-full place-items-center mt-10">
               <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
