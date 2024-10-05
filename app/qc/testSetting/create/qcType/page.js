@@ -1,5 +1,9 @@
 "use client"
 
+import SideBar from "@/components/Sidebar"
+import Breadcrumb from "@/components/Breadcrumb"
+import Footer from "@/components/Footer"
+
 export default function QcType(){
   return (
     <>
