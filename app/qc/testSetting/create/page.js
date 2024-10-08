@@ -10,9 +10,8 @@ import Link from "next/link";
 import BackButton from "@/components/BackButton";
 import SubmitButton from "@/components/SubmitButton";
 import Swal from "sweetalert2";
-import Popup from "@/components/Popup";
 
-export default function AddPlan() {
+export default function AddTestSetting() {
   const session = useSession();
   const router = useRouter();
   const role = session?.data?.data?.role;
@@ -21,7 +20,7 @@ export default function AddPlan() {
   const [qcTypeList, setQcTypeList] = useState([]);
   const [qcClass, setQcClass] = useState("");
   const [qcScript, setQcScript] = useState({
-    script_1: 0,
+    script_1: "SSSID_HAL_TEST_TYPE_",
     script_2: 0,
     script_3: 0,
     script_4: "SSSVAL_HAL_TSTART_NONE",
@@ -50,83 +49,95 @@ export default function AddPlan() {
     fetchData();
   }, [session, role]);
 
-  useEffect(() => {
-    const temp = { ...qcScript };
-    delete temp.script_13;
-    delete temp.script_14;
-    delete temp.script_15;
-    delete temp.script_16;
-    console.log(temp);
-  }, [qcScript]);
-
   const createNewTest = async () => {
     const temp = { ...qcScript };
-    if (!(!name || !qcType.value)) {
-      if (qcType.name === "seaward") {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "plan", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            planName: name,
-            startDate: startDate,
-            endDate: endDate,
-            detail: detail,
-            productionLot: temp,
-          }),
-        });
-        if (!res.ok) {
-          Swal.fire({
-            icon: "error",
-            title: "ตรวจสอบข้อมูลใหม่อีกครั้ง",
-            text: "ชื่อผู้ใช้งานและอีเมล์ไม่สามารถซ้ำกับของที่มีอยู่ได้ และข้อมูลที่จำเป็นต้องกรอกกรอกครบเรียบร้อยแล้ว",
-          });
-        } else {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "บันทึกข้อมูลเรียบร้อย",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          setTimeout(() => {
-            router.refresh();
-          }, 1500);
-        }
-      } else {
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "qc/main", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            qcType: qcType.value,
-            testName: name,
-            detail: detail
-          }),
-        });
-        if (!res.ok) {
-          Swal.fire({
-            icon: "error",
-            title: "ตรวจสอบข้อมูลใหม่อีกครั้ง",
-            text: "ชื่อผู้ใช้งานและอีเมล์ไม่สามารถซ้ำกับของที่มีอยู่ได้ และข้อมูลที่จำเป็นต้องกรอกกรอกครบเรียบร้อยแล้ว",
-          });
-        } else {
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "บันทึกข้อมูลเรียบร้อย",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          setTimeout(() => {
-            router.refresh();
-          }, 1500);
-        }
-      }
-    } else {
+    temp.script_1 = temp.script_1 + qcClass;
+    if (!name || !qcType.value) {
       Swal.fire({
         icon: "error",
         title: "กรอกข้อมูลไม่ครบ",
         text: "กรุณากรอกข้อมูลให้ครบตามช่องที่มี * สีแดง",
       });
+    }
+
+    if (qcType.name === "seaward") {
+      if (qcClass === "POWER_LEAKAGE") {
+        var res = await fetch(process.env.NEXT_PUBLIC_API_URL + "main/script", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            qcType: qcType.value,
+            testName: name,
+            detail: detail,
+            script: temp,
+          }),
+        });
+      } else {
+        delete temp.script_13;
+        delete temp.script_14;
+        delete temp.script_15;
+        delete temp.script_16;
+        var res = await fetch(
+          process.env.NEXT_PUBLIC_API_URL + "qc/main/script",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              qcType: qcType.value,
+              testName: name,
+              detail: detail,
+              script: temp,
+            }),
+          }
+        );
+      }
+      if (!res.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "ตรวจสอบข้อมูลใหม่อีกครั้ง",
+          text: "ชื่อผู้ใช้งานและอีเมล์ไม่สามารถซ้ำกับของที่มีอยู่ได้ และข้อมูลที่จำเป็นต้องกรอกกรอกครบเรียบร้อยแล้ว",
+        });
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "บันทึกข้อมูลเรียบร้อย",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          router.refresh();
+        }, 1500);
+      }
+    } else {
+      // qc type other than seaward
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "qc/main", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          qcType: qcType.value,
+          testName: name,
+          detail: detail,
+        }),
+      });
+      if (!res.ok) {
+        Swal.fire({
+          icon: "error",
+          title: "ตรวจสอบข้อมูลใหม่อีกครั้ง",
+          text: "ชื่อผู้ใช้งานและอีเมล์ไม่สามารถซ้ำกับของที่มีอยู่ได้ และข้อมูลที่จำเป็นต้องกรอกกรอกครบเรียบร้อยแล้ว",
+        });
+      } else {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "บันทึกข้อมูลเรียบร้อย",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setTimeout(() => {
+          router.refresh();
+        }, 1500);
+      }
     }
   };
 
@@ -191,7 +202,7 @@ export default function AddPlan() {
                             )
                               setQcClass(null);
                             setQcScript({
-                              script_1: 0,
+                              script_1: "SSSID_HAL_TEST_TYPE_",
                               script_2: 0,
                               script_3: 0,
                               script_4: "SSSVAL_HAL_TSTART_NONE",
@@ -252,17 +263,15 @@ export default function AddPlan() {
                           defaultValue={"none"}
                           onChange={(e) => setQcClass(e.target.value)}
                         >
-                          <option
-                            value="none"
-                            disabled
-                            hidden
-                          >
+                          <option value="none" disabled hidden>
                             เลือกชนิดการทดสอบ
                           </option>
                           <option value="DCIR">DCIR</option>
                           <option value="HIPOT">HIPOT</option>
                           <option value="EBOND">EBOND</option>
                           <option value="POWER_LEAKAGE">POWER_LEAKAGE</option>
+                          <option value="ARC_DETECTION">ARC_DETECTION</option>
+                          <option value="LOAD_POWER_TEST">LOAD_POWER_TEST</option>
                         </select>
                       </label>
                     </div>
