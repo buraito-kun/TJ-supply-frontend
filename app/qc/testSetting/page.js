@@ -121,7 +121,7 @@ export default function QcSetting() {
                               <h5 className="">{data.detail}</h5>
                             </div>
                             <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              <Link href="#">{Translator.edit.icon}</Link>
+                              <Link href={`/qc/testSetting/edit/${data.ID}`}>{Translator.edit.icon}</Link>
                             </div>
                             <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                               <button
