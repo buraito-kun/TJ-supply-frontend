@@ -42,20 +42,15 @@ export default function EditFormula({ params }) {
     setMaterials(temp);
   };
 
-  const createNewFormula = async () => {
-    if (!(!name || !toItem)) {
-      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "formula", {
-        method: "POST",
+  const editFormulaData = async () => {
+    if (name) {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + `formula/${params.formulaProjectID}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name,
-          toItem: toItem,
           costFormula: costFormula,
-          detail: detail,
-          material: materials.map((data) => ({
-            item: data.value,
-            amount: Number(data.amount),
-          })),
+          detail: detail
         }),
       });
       if (!res.ok) {
@@ -137,7 +132,7 @@ export default function EditFormula({ params }) {
                 </h2>
               </div>
               <div className="flex w-full place-content-end mr-20">
-                <SubmitButton text="บันทึก" onClick={createNewFormula} />
+                <SubmitButton text="บันทึก" onClick={editFormulaData} />
               </div>
             </div>
             <div className="bg-white w-full h-auto flex flex-col place-items-center place-content-center">
@@ -195,7 +190,7 @@ export default function EditFormula({ params }) {
                           className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md"
                           type="number"
                           min={0}
-                          defaultValue={costFormula}
+                          value={costFormula}
                           onChange={(e) => setCostFormula(e.target.value)}
                           required
                         />
