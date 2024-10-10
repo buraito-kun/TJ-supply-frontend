@@ -264,7 +264,7 @@ export default function EditFormula({ params }) {
                                   <span className="text-red-600">&nbsp;*</span>
                                 </h4>
                                 <input
-                                  className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md"
+                                  className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md hover:cursor-not-allowed"
                                   type="number"
                                   min={1}
                                   defaultValue={data.amount}
