@@ -31,6 +31,8 @@ export default function AddUser({ params }) {
     { value: "storager", label: "ผู้ดูแลคลัง" },
     { value: "tester", label: "ผู้ทดสอบ" },
     { value: "worker", label: "แรงงาน" },
+    { value: "admin", label: "แอดมิน" },
+    { value: "finance", label: "การเงิน" },
   ];
 
   useEffect(() => {
@@ -53,20 +55,25 @@ export default function AddUser({ params }) {
         !duty
       )
     ) {
-      var roleTemp = "----";
+      var roleTemp = "----------";
       for (let r of duty) {
-        if (r.value === "manager") roleTemp = "m" + roleTemp.slice(1, 4);
+        if (r.value === "manager") roleTemp = "m" + roleTemp.slice(1, 10);
         else if (r.value === "storager")
-          roleTemp = roleTemp.slice(0, 1) + "s" + roleTemp.slice(2, 4);
+          roleTemp = roleTemp.slice(0, 1) + "s" + roleTemp.slice(2, 10);
         else if (r.value === "tester")
-          roleTemp = roleTemp.slice(0, 2) + "t" + roleTemp.slice(3, 4);
-        else if (r.value === "worker") roleTemp = roleTemp.slice(0, 3) + "w";
+          roleTemp = roleTemp.slice(0, 2) + "t" + roleTemp.slice(3, 10);
+        else if (r.value === "worker")
+          roleTemp = roleTemp.slice(0, 3) + "w" + roleTemp.slice(4, 10);
+        else if (r.value === "admin")
+          roleTemp = roleTemp.slice(0, 4) + "a" + roleTemp.slice(5, 10);
+        else if (r.value === "finance")
+          roleTemp = roleTemp.slice(0, 5) + "f" + roleTemp.slice(6, 10);
       }
       const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body:
-          roleTemp === "----"
+          roleTemp === "----------"
             ? JSON.stringify({
                 username: username,
                 password: password,
@@ -76,12 +83,16 @@ export default function AddUser({ params }) {
                 gender: gender,
                 role:
                   params.role === "0"
-                    ? "m---"
+                    ? "m---------"
                     : params.role === "1"
-                    ? "-s--"
+                    ? "-s--------"
                     : params.role === "2"
-                    ? "--t-"
-                    : "---w",
+                    ? "--t-------"
+                    : params.role === "4"
+                    ? "----a-----"
+                    : params.role === "5"
+                    ? "-----f----"
+                    : "---w------",
                 phone: tel,
                 address: address,
               })
@@ -302,6 +313,8 @@ export default function AddUser({ params }) {
                                     params?.role === "1" ? roles[1] : null,
                                     params?.role === "2" ? roles[2] : null,
                                     params?.role === "3" ? roles[3] : null,
+                                    params?.role === "4" ? roles[4] : null,
+                                    params?.role === "5" ? roles[5] : null,
                                   ]}
                                   options={roles}
                                   onChange={(e) => setDuty(e)}

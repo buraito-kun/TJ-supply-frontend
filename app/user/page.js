@@ -21,10 +21,14 @@ export default function User() {
   const [storager, setStorager] = useState([]);
   const [tester, setTester] = useState([]);
   const [worker, setWorker] = useState([]);
+  const [admin, setAdmin] = useState([]);
+  const [finance, setFinance] = useState([]);
   const [managerPage, setManagerPage] = useState(1);
   const [storagerPage, setStoragerPage] = useState(1);
   const [testerPage, setTesterPage] = useState(1);
   const [workerPage, setWorkerPage] = useState(1);
+  const [adminPage, setAdminPage] = useState(1);
+  const [financePage, setFinancePage] = useState(1);
 
   useEffect(() => {
     if (session?.status === "authenticated") {
@@ -74,6 +78,22 @@ export default function User() {
     };
     fetchData();
   }, [workerPage]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const adminData = await fetchDataPerRole(adminPage, "a");
+      setAdmin(adminData);
+    };
+    fetchData();
+  }, [adminPage]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const financeData = await fetchDataPerRole(financePage, "f");
+      setFinance(financeData);
+    };
+    fetchData();
+  }, [financePage]);
 
   const fetchDataPerRole = async (page, role) => {
     const res = await fetch(
@@ -155,6 +175,34 @@ export default function User() {
   };
   const lastWorkerPage = () => {
     setWorkerPage(worker.allPage);
+  };
+  const increaseAdminPage = () => {
+    setAdminPage(
+      adminPage >= admin.allPage ? admin.allPage : adminPage + 1
+    );
+  };
+  const decreaseAdminPage = () => {
+    setAdminPage(adminPage <= 1 ? 1 : adminPage - 1);
+  };
+  const firstAdminPage = () => {
+    setAdminPage(1);
+  };
+  const lastAdminPage = () => {
+    setAdminPage(admin.allPage);
+  };
+  const increaseFinancePage = () => {
+    setFinancePage(
+      financePage >= finance.allPage ? finance.allPage : financePage + 1
+    );
+  };
+  const decreaseFinancePage = () => {
+    setFinancePage(financePage <= 1 ? 1 : financePage - 1);
+  };
+  const firstFinancePage = () => {
+    setFinancePage(1);
+  };
+  const lastFinancePage = () => {
+    setFinancePage(finance.allPage);
   };
 
   return (
@@ -523,6 +571,242 @@ export default function User() {
                   decrease={decreaseStoragerPage}
                   first={firstStoragerPage}
                   last={lastStoragerPage}
+                />
+              </div>
+            </div>
+            {/*
+            
+              finance session
+
+            */}
+            <div className="flex flex-col w-full mt-[50px]">
+              <div className="flex flex-row w-full place-items-center place-content-between">
+                <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
+                  รายชื่อฝ่ายการเงิน
+                </h2>
+                <div className="pr-[120px]">
+                  <Link href="/user/add/5">
+                    <CircleImageButton />
+                  </Link>
+                </div>
+              </div>
+              <div className="ml-10 mr-20 mt-10 flex flex-col place-content-center border border-[#cecece] rounded-xl">
+                <div className="flex place-content-center">
+                  <div className="w-[95%] my-[20px]">
+                    <div className="text-black font-bold">
+                      <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
+                        <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
+                          ชื่อผู้ใช้
+                        </div>
+                        <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
+                          สถานะ
+                        </div>
+                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                          ข้อมูล
+                        </div>
+                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                          แก้ไข
+                        </div>
+                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                          ลบ
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-black">
+                      {finance?.data?.map((data) => {
+                        return (
+                          <div
+                            key={data.ID}
+                            className="flex flex-row w-full h-12 hover:bg-gray-200"
+                          >
+                            <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                              {Translator.user.icon}
+                              <h5 className="ml-5">
+                                {data.name + " " + data.surname}
+                              </h5>
+                            </div>
+                            <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                              <h5 className="bg-[#adff9d] w-10 text-sm text-[#13A452] rounded-xl">
+                                ปกติ
+                              </h5>
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                              <Link href={"/user/info/" + data.ID}>
+                                {Translator.info.icon}
+                              </Link>
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                              <Link href={"/user/edit/" + data.ID}>
+                                {Translator.edit.icon}
+                              </Link>
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                              {session?.data?.data?.ID !== data.ID ? (
+                                <button
+                                  onClick={() => {
+                                    Swal.fire({
+                                      title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
+                                      text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonColor: "#d33",
+                                      cancelButtonColor: "#3085d6",
+                                      confirmButtonText: "ตกลง",
+                                      cancelButtonText: "ยกเลิก",
+                                    }).then(async (result) => {
+                                      if (result.isConfirmed) {
+                                        await fetch(
+                                          process.env.NEXT_PUBLIC_API_URL +
+                                            `user/${data.ID}`,
+                                          { method: "DELETE" }
+                                        );
+                                        await refreshData();
+                                        Swal.fire({
+                                          title: "ลบข้อมูลสำเร็จ",
+                                          text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
+                                          icon: "success",
+                                        });
+                                      }
+                                    });
+                                  }}
+                                >
+                                  {Translator.delete.icon}
+                                </button>
+                              ) : null}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex place-content-center ml-10 mr-20">
+                <Pagination
+                  currentPage={financePage}
+                  allPage={finance.allPage}
+                  increase={increaseFinancePage}
+                  decrease={decreaseFinancePage}
+                  first={firstFinancePage}
+                  last={lastFinancePage}
+                />
+              </div>
+            </div>
+            {/*
+            
+              admin session
+
+            */}
+            <div className="flex flex-col w-full mt-[50px]">
+              <div className="flex flex-row w-full place-items-center place-content-between">
+                <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
+                  รายชื่อแอดมิน
+                </h2>
+                <div className="pr-[120px]">
+                  <Link href="/user/add/4">
+                    <CircleImageButton />
+                  </Link>
+                </div>
+              </div>
+              <div className="ml-10 mr-20 mt-10 flex flex-col place-content-center border border-[#cecece] rounded-xl">
+                <div className="flex place-content-center">
+                  <div className="w-[95%] my-[20px]">
+                    <div className="text-black font-bold">
+                      <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
+                        <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
+                          ชื่อผู้ใช้
+                        </div>
+                        <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
+                          สถานะ
+                        </div>
+                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                          ข้อมูล
+                        </div>
+                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                          แก้ไข
+                        </div>
+                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                          ลบ
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-black">
+                      {admin?.data?.map((data) => {
+                        return (
+                          <div
+                            key={data.ID}
+                            className="flex flex-row w-full h-12 hover:bg-gray-200"
+                          >
+                            <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                              {Translator.user.icon}
+                              <h5 className="ml-5">
+                                {data.name + " " + data.surname}
+                              </h5>
+                            </div>
+                            <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                              <h5 className="bg-[#adff9d] w-10 text-sm text-[#13A452] rounded-xl">
+                                ปกติ
+                              </h5>
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                              <Link href={"/user/info/" + data.ID}>
+                                {Translator.info.icon}
+                              </Link>
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                              <Link href={"/user/edit/" + data.ID}>
+                                {Translator.edit.icon}
+                              </Link>
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                              {session?.data?.data?.ID !== data.ID ? (
+                                <button
+                                  onClick={() => {
+                                    Swal.fire({
+                                      title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
+                                      text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonColor: "#d33",
+                                      cancelButtonColor: "#3085d6",
+                                      confirmButtonText: "ตกลง",
+                                      cancelButtonText: "ยกเลิก",
+                                    }).then(async (result) => {
+                                      if (result.isConfirmed) {
+                                        await fetch(
+                                          process.env.NEXT_PUBLIC_API_URL +
+                                            `user/${data.ID}`,
+                                          { method: "DELETE" }
+                                        );
+                                        await refreshData();
+                                        Swal.fire({
+                                          title: "ลบข้อมูลสำเร็จ",
+                                          text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
+                                          icon: "success",
+                                        });
+                                      }
+                                    });
+                                  }}
+                                >
+                                  {Translator.delete.icon}
+                                </button>
+                              ) : null}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex place-content-center ml-10 mr-20">
+                <Pagination
+                  currentPage={adminPage}
+                  allPage={admin.allPage}
+                  increase={increaseAdminPage}
+                  decrease={decreaseAdminPage}
+                  first={firstAdminPage}
+                  last={lastAdminPage}
                 />
               </div>
             </div>

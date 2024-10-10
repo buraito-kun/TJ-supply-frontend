@@ -22,6 +22,8 @@ export default function InfoUser({ params }) {
     { value: "storager", label: "ผู้ดูแลคลัง" },
     { value: "tester", label: "ผู้ทดสอบ" },
     { value: "worker", label: "แรงงาน" },
+    { value: "admin", label: "แอดมิน" },
+    { value: "finance", label: "การเงิน" },
   ];
 
   useEffect(() => {
@@ -174,6 +176,8 @@ export default function InfoUser({ params }) {
                             userData?.data?.role[1] === "s" ? roles[1] : null,
                             userData?.data?.role[2] === "t" ? roles[2] : null,
                             userData?.data?.role[3] === "w" ? roles[3] : null,
+                            userData?.data?.role[4] === "a" ? roles[4] : null,
+                            userData?.data?.role[5] === "f" ? roles[5] : null,
                           ]}
                           isDisabled
                         />
