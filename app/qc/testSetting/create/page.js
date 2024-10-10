@@ -61,8 +61,8 @@ export default function AddTestSetting() {
     }
 
     if (qcType.name === "seaward") {
-      if (qcClass === "POWER_LEAKAGE") {
-        var res = await fetch(process.env.NEXT_PUBLIC_API_URL + "main/script", {
+      if (qcClass === "PWRLK") {
+        var res = await fetch(process.env.NEXT_PUBLIC_API_URL + "qc/main", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -78,7 +78,7 @@ export default function AddTestSetting() {
         delete temp.script_15;
         delete temp.script_16;
         var res = await fetch(
-          process.env.NEXT_PUBLIC_API_URL + "qc/main/script",
+          process.env.NEXT_PUBLIC_API_URL + "qc/main",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -267,11 +267,13 @@ export default function AddTestSetting() {
                             เลือกชนิดการทดสอบ
                           </option>
                           <option value="DCIR">DCIR</option>
-                          <option value="HIPOT">HIPOT</option>
-                          <option value="EBOND">EBOND</option>
-                          <option value="POWER_LEAKAGE">POWER_LEAKAGE</option>
-                          <option value="ARC_DETECTION">ARC_DETECTION</option>
-                          <option value="LOAD_POWER_TEST">LOAD_POWER_TEST</option>
+                          <option value="HIPOT_50">HIPOT_50</option>
+                          <option value="EBOND_50">EBOND_50</option>
+                          <option value="PWRLK">POWER_LEAKAGE</option>
+                          <option value="PWRTLK">POWER + TOUCH LEAKAGE</option>
+                          <option value="HIPOT_60">HIPOT_60</option>
+                          <option value="EBOND_60">EBOND_60</option>
+                          <option value="HIPOT_DC">HIPOT_DC</option>
                         </select>
                       </label>
                     </div>
@@ -469,7 +471,7 @@ export default function AddTestSetting() {
                             required
                           />
                         </label>
-                        {qcClass === "POWER_LEAKAGE" && (
+                        {qcClass === "PWRLK" && (
                           <>
                             <label className="w-[45%] h-auto mx-5 my-3 flex flex-col">
                               <h4 className="text-xl font-normal font-['Sarabun']">
