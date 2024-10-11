@@ -216,9 +216,14 @@ export default function User() {
               <h2 className="ml-20 text-black text-2xl font-bold font-['Sarabun']">
                 รายชื่อผู้ใช้งาน
               </h2>
-              <Link href="/user/actionHistory" className="mr-20">
-                <SubmitButton text="ประวัติการใช้งาน" />
-              </Link>
+              <div>
+                <Link href="/user/approve" className="mr-3">
+                  <SubmitButton text="อนุมัติพนักงาน" />
+                </Link>
+                <Link href="/user/actionHistory" className="mr-20">
+                  <SubmitButton text="ประวัติการใช้งาน" />
+                </Link>
+              </div>
             </div>
             {/*
 

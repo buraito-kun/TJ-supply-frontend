@@ -253,6 +253,7 @@ const Translator = {
   },
   testSetting: { name: "ตั้งค่าการทดสอบ" },
   project: { name: "โปรเจ็ค" },
+  approve: { name: "อนุมัติ" },
   // 3: {name: "แรงงาน"},
   // 2: {name: "ผู้ทดสอบ"},
   // 1: {name: "ผู้ดูแลคลัง"},
