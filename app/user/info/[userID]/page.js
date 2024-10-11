@@ -75,10 +75,10 @@ export default function InfoUser({ params }) {
                 </h2>
               </div>
             </div>
-            <div className="bg-white w-full h-full flex flex-col place-items-center place-content-center">
-              <div className="w-[1000px] h-[700px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
+            <div className="bg-white w-full flex flex-col place-items-center place-content-center">
+              <div className="w-[1000px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
                 <div className="mx-10 my-10 w-[90%] h-[90%] flex flex-col text-black text-xl font-['Sarabun']">
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
                     <div className="w-full h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
@@ -92,7 +92,7 @@ export default function InfoUser({ params }) {
                       </label>
                     </div>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
                     <div className="w-1/2 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
@@ -119,7 +119,7 @@ export default function InfoUser({ params }) {
                       </label>
                     </div>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
                     <div className="w-1/2 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
@@ -146,7 +146,30 @@ export default function InfoUser({ params }) {
                       </label>
                     </div>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
+                    <div className="w-1/2 h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          วันเกิด (MM/DD/YYYY)
+                        </h4>
+                        <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden">
+                          <input className="text-2xl font-normal font-['Sarabun'] w-full" type="date" value={userData?.data?.birthday.split("T")[0]} disabled />
+                        </div>
+                      </label>
+                    </div>
+                    <div className="w-[5%] h-full"></div>
+                    <div className="w-1/2 h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          วันบรรจุเข้าทำงาน (MM/DD/YYYY)
+                        </h4>
+                        <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden">
+                        <input className="text-2xl font-normal font-['Sarabun'] w-full" type="date" value={userData?.data?.dateEmployment.split("T")[0]} disabled />
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="w-full flex mb-5">
                     <div className="w-[20%] h-full">
                       <h4 className="text-xl font-normal font-['Sarabun']">
                         เพศ

@@ -25,6 +25,8 @@ export default function AddUser({ params }) {
   const [tel, setTel] = useState("");
   const [duty, setDuty] = useState([]);
   const [address, setAddress] = useState("");
+  const [birthday, setBirthday] = useState(new Date().toISOString().split("T")[0]);
+  const [dateEmployment, setDateEmployment] = useState(new Date().toISOString().split("T")[0]);
 
   const roles = [
     { value: "manager", label: "ผู้ดูแลระบบ" },
@@ -95,6 +97,8 @@ export default function AddUser({ params }) {
                     : "---w------",
                 phone: tel,
                 address: address,
+                birthday: birthday,
+                dateEmployment: dateEmployment,
               })
             : JSON.stringify({
                 username: username,
@@ -106,6 +110,8 @@ export default function AddUser({ params }) {
                 phone: tel,
                 role: roleTemp,
                 address: address,
+                birthday: birthday,
+                dateEmployment: dateEmployment,
               }),
       });
       if (!res.ok) {
@@ -155,10 +161,10 @@ export default function AddUser({ params }) {
                 <SubmitButton text="เพิ่มผู้ใช้งาน" onClick={createNewUser} />
               </div>
             </div>
-            <div className="bg-white w-full h-full flex flex-col place-items-center place-content-center">
-              <div className="w-[1000px] h-[650px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
-                <div className="mx-10 my-10 w-[90%] h-[90%] flex flex-col text-black text-xl font-['Sarabun']">
-                  <div className="w-full h-[200px] flex">
+            <div className="bg-white w-full flex flex-col place-items-center place-content-center">
+              <div className="w-[1000px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
+                <div className="mx-10 my-10 w-[90%] flex flex-col text-black text-xl font-['Sarabun']">
+                  <div className="w-full flex mb-5">
                     <div className="w-1/2 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
@@ -192,7 +198,7 @@ export default function AddUser({ params }) {
                       </label>
                     </div>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
                     <div className="w-1/2 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
@@ -225,7 +231,7 @@ export default function AddUser({ params }) {
                       </label>
                     </div>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
                     <div className="w-1/2 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
@@ -268,7 +274,44 @@ export default function AddUser({ params }) {
                       </label>
                     </div>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
+                    <div className="w-1/2 h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          วันเกิด (MM/DD/YYYY)
+                        </h4>
+                        <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden">
+                          <input
+                            className="text-2xl font-normal font-['Sarabun'] w-full h-full"
+                            type="date"
+                            value={birthday}
+                            onChange={e=>setBirthday(e.target.value)}
+                            min={"1950-01-01"}
+                            max={new Date().toISOString().split("T")[0]}
+                          />
+                        </div>
+                      </label>
+                    </div>
+                    <div className="w-[5%] h-full"></div>
+                    <div className="w-1/2 h-full flex">
+                      <label className="w-[100%]">
+                        <h4 className="text-xl font-normal font-['Sarabun']">
+                          วันบรรจุเข้าทำงาน (MM/DD/YYYY)
+                        </h4>
+                        <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden">
+                          <input
+                            className="text-2xl font-normal font-['Sarabun'] w-full"
+                            type="date"
+                            value={dateEmployment}
+                            onChange={e=>setDateEmployment(e.target.value)}
+                            min={"1950-01-01"}
+                            max={new Date().toISOString().split("T")[0]}
+                          />
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                  <div className="w-full flex mb-5">
                     <div className="w-[20%] h-full">
                       <label>
                         <h4 className="text-xl font-normal font-['Sarabun']">
