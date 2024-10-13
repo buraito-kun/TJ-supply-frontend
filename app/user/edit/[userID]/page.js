@@ -4,17 +4,19 @@ import SideBar from "@/components/Sidebar";
 import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
 import Select from "react-select";
 import SubmitButton from "@/components/SubmitButton";
 import Swal from "sweetalert2";
+import Image from "next/image";
 
 export default function EditUser({ params }) {
   const session = useSession();
   const router = useRouter();
+  const fileInputRef = useRef(null);
   const role = session?.data?.data?.role;
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
@@ -174,6 +176,61 @@ export default function EditUser({ params }) {
             <div className="bg-white w-full flex flex-col place-items-center place-content-center">
               <div className="w-[1000px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
                 <div className="mx-10 my-10 w-[90%] h-[90%] flex flex-col text-black text-xl font-['Sarabun']">
+                  <div className="w-full flex place-items-center place-content-center mb-5">
+                    <input
+                      className="hidden"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      type="file"
+                      id="file"
+                      name="file"
+                      onChange={async (e) => {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        await fetch(
+                          process.env.NEXT_PUBLIC_API_URL +
+                            `user/upload/profile/${session.data.data.ID}`,
+                          { method: "PATCH", body: formData }
+                        );
+                        router.refresh();
+                        Swal.fire({
+                          position: "top-end",
+                          icon: "success",
+                          title: "บันทึกรูปโปรไฟล์สำเร็จ",
+                          showConfirmButton: false,
+                          timer: 1000,
+                        });
+                      }}
+                    />
+                    {session.data?.data?.ID && (
+                      <button
+                        className="rounded-full"
+                        onClick={() => {
+                          fileInputRef.current.click();
+                        }}
+                      >
+                        <div className="relative group w-[150px] h-[150px] rounded-full">
+                          <Image
+                            className="rounded-full absolute w-full h-full"
+                            src={`/api/user/image/${
+                              session.data?.data.ID
+                            }?timestamp=${Date.now()}`}
+                            width={150}
+                            height={150}
+                            alt="userProfile"
+                          />
+                          <div className="absolute w-full h-full rounded-full bg-black opacity-80 invisible group-hover:visible" />
+                          <div className="w-full h-full absolute invisible group-hover:visible rounded-full">
+                            <div className="w-full h-full flex place-items-center place-content-center rounded-full">
+                              <h1 className="text-white text-xl font-normal font-['Sarabun']">
+                                เปลี่ยนรูปภาพ
+                              </h1>
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    )}
+                  </div>
                   <div className="w-full flex mb-5">
                     <div className="w-full h-full flex">
                       <label className="w-[100%]">

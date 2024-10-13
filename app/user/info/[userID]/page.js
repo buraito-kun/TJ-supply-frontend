@@ -10,6 +10,7 @@ import Link from "next/link";
 import BackButton from "@/components/BackButton";
 import Swal from "sweetalert2";
 import Select from "react-select";
+import Image from "next/image";
 
 export default function InfoUser({ params }) {
   const session = useSession();
@@ -78,6 +79,21 @@ export default function InfoUser({ params }) {
             <div className="bg-white w-full flex flex-col place-items-center place-content-center">
               <div className="w-[1000px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
                 <div className="mx-10 my-10 w-[90%] h-[90%] flex flex-col text-black text-xl font-['Sarabun']">
+                  <div className="w-full flex place-items-center place-content-center mb-5">
+                    {session.data?.data?.ID && (
+                      <div className="relative group w-[150px] h-[150px]">
+                        <Image
+                          className="rounded-full absolute w-full h-full"
+                          src={`/api/user/image/${
+                            session.data?.data.ID
+                          }?timestamp=${Date.now()}`}
+                          width={150}
+                          height={150}
+                          alt="userProfile"
+                        />
+                      </div>
+                    )}
+                  </div>
                   <div className="w-full flex mb-5">
                     <div className="w-full h-full flex">
                       <label className="w-[100%]">
@@ -153,7 +169,12 @@ export default function InfoUser({ params }) {
                           วันเกิด (MM/DD/YYYY)
                         </h4>
                         <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden">
-                          <input className="text-2xl font-normal font-['Sarabun'] w-full" type="date" value={userData?.data?.birthday.split("T")[0]} disabled />
+                          <input
+                            className="text-2xl font-normal font-['Sarabun'] w-full"
+                            type="date"
+                            value={userData?.data?.birthday.split("T")[0]}
+                            disabled
+                          />
                         </div>
                       </label>
                     </div>
@@ -164,7 +185,12 @@ export default function InfoUser({ params }) {
                           วันบรรจุเข้าทำงาน (MM/DD/YYYY)
                         </h4>
                         <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden">
-                        <input className="text-2xl font-normal font-['Sarabun'] w-full" type="date" value={userData?.data?.dateEmployment.split("T")[0]} disabled />
+                          <input
+                            className="text-2xl font-normal font-['Sarabun'] w-full"
+                            type="date"
+                            value={userData?.data?.dateEmployment.split("T")[0]}
+                            disabled
+                          />
                         </div>
                       </label>
                     </div>
