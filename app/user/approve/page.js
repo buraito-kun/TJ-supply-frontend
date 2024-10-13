@@ -101,10 +101,10 @@ export default function ApproveUser() {
                           ชื่อ-นามสกุล
                         </div>
                         <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
-                          email
+                          อีเมล์
                         </div>
                         <div className="w-4/12 text-center text-lg font-bold font-['Sarabun']">
-                          role
+                          ตำแหน่ง
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           ยืนยัน
