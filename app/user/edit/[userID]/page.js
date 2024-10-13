@@ -283,7 +283,7 @@ export default function EditUser({ params }) {
                     <div className="w-1/2 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
-                          อีเมล์
+                          อีเมล์<span className="text-red-600">&nbsp;*</span>
                         </h4>
                         <input
                           className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md"
@@ -315,7 +315,7 @@ export default function EditUser({ params }) {
                     <div className="w-1/2 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
-                          วันเกิด (MM/DD/YYYY)
+                          วันเกิด (MM/DD/YYYY)<span className="text-red-600">&nbsp;*</span>
                         </h4>
                         <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden">
                           <input
