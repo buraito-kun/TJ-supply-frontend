@@ -103,7 +103,6 @@ export default function EditUser({ params }) {
           body:
             roleTemp === "----------"
               ? JSON.stringify({
-                  username: username,
                   name: name,
                   surname: surname,
                   gender: gender,
@@ -111,9 +110,9 @@ export default function EditUser({ params }) {
                   address: address,
                   birthday: birthday,
                   dateEmployment: dateEmployment,
+                  email: email,
                 })
               : JSON.stringify({
-                  username: username,
                   name: name,
                   surname: surname,
                   gender: gender,
@@ -122,6 +121,7 @@ export default function EditUser({ params }) {
                   address: address,
                   birthday: birthday,
                   dateEmployment: dateEmployment,
+                  email: email,
                 }),
         }
       );
@@ -286,12 +286,11 @@ export default function EditUser({ params }) {
                           อีเมล์
                         </h4>
                         <input
-                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md cursor-not-allowed"
+                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md"
                           type="email"
                           placeholder="example@gmail.com"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          disabled
                         />
                       </label>
                     </div>
@@ -336,9 +335,9 @@ export default function EditUser({ params }) {
                         <h4 className="text-xl font-normal font-['Sarabun']">
                           วันบรรจุเข้าทำงาน (MM/DD/YYYY)
                         </h4>
-                        <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden">
+                        <div className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center overflow-hidden cursor-not-allowed">
                           <input
-                            className="text-2xl font-normal font-['Sarabun'] w-full"
+                            className="text-2xl font-normal font-['Sarabun'] w-full cursor-not-allowed"
                             type="date"
                             value={dateEmployment.split("T")[0]}
                             disabled
