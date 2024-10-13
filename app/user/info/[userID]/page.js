@@ -85,7 +85,7 @@ export default function InfoUser({ params }) {
                         <Image
                           className="rounded-full absolute w-full h-full"
                           src={`/api/user/image/${
-                            session.data?.data.ID
+                            params.userID
                           }?timestamp=${Date.now()}`}
                           width={150}
                           height={150}

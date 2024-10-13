@@ -189,7 +189,7 @@ export default function EditUser({ params }) {
                         formData.append("file", e.target.files[0]);
                         await fetch(
                           process.env.NEXT_PUBLIC_API_URL +
-                            `user/upload/profile/${session.data.data.ID}`,
+                            `user/upload/profile/${params.userID}`,
                           { method: "PATCH", body: formData }
                         );
                         router.refresh();
@@ -213,7 +213,7 @@ export default function EditUser({ params }) {
                           <Image
                             className="rounded-full absolute w-full h-full"
                             src={`/api/user/image/${
-                              session.data?.data.ID
+                              params.userID
                             }?timestamp=${Date.now()}`}
                             width={150}
                             height={150}
