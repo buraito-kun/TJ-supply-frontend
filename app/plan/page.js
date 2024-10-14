@@ -221,7 +221,7 @@ export default function Plan() {
       </div>
       <div className="hidden">
         <div ref={componentRef}>
-          <div className="flex flex-wrap w-full h-full">
+          <div className="flex flex-wrap w-full h-full bg-white">
             {encryptedBarcode?.data?.map((data) => {
               // return <Barcode key={data.ID} value={data.encryptIDValue} />
 
