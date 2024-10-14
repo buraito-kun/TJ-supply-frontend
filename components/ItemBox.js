@@ -12,7 +12,9 @@ export default function ItemBox({ ...props }) {
                 <div className="w-[40%] h-full flex place-items-center place-content-center">
                   <Image
                     className="size-[110px] rounded-md"
-                    src="/box.png"
+                    src={`/api/item/image/${
+                      props.ID
+                    }?timestamp=${Date.now()}`}
                     alt="item"
                     width="110"
                     height="110"

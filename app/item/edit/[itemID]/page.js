@@ -4,17 +4,19 @@ import SideBar from "@/components/Sidebar";
 import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
 import Select from "react-select";
 import SubmitButton from "@/components/SubmitButton";
 import Swal from "sweetalert2";
+import Image from "next/image";
 
 export default function EditItem({ params }) {
   const session = useSession();
   const router = useRouter();
+  const fileInputRef = useRef();
   const role = session?.data?.data?.role;
   const [costPrice, setCostPrice] = useState(0);
   const [salePrice, setSalePrice] = useState(0);
@@ -127,10 +129,65 @@ export default function EditItem({ params }) {
                 <SubmitButton text="บันทึกการแก้ไข" onClick={updateItem} />
               </div>
             </div>
-            <div className="bg-white w-full h-full flex flex-col place-items-center place-content-center">
-              <div className="w-[1000px] h-[650px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
+            <div className="bg-white w-full flex flex-col place-items-center place-content-center">
+              <div className="w-[1000px] flex flex-col place-items-center place-content-between border-black border-2 rounded-[15px]">
                 <div className="mx-10 my-10 w-[90%] h-[90%] flex flex-col text-black text-xl font-['Sarabun']">
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex place-items-center place-content-center mb-5">
+                    <input
+                      className="hidden"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      type="file"
+                      id="file"
+                      name="file"
+                      onChange={async (e) => {
+                        const formData = new FormData();
+                        formData.append("file", e.target.files[0]);
+                        await fetch(
+                          process.env.NEXT_PUBLIC_API_URL +
+                            `items/upload/itemImage/${params.itemID}`,
+                          { method: "PATCH", body: formData }
+                        );
+                        router.refresh();
+                        Swal.fire({
+                          position: "top-end",
+                          icon: "success",
+                          title: "บันทึกรูปโปรไฟล์สำเร็จ",
+                          showConfirmButton: false,
+                          timer: 1000,
+                        });
+                      }}
+                    />
+                    {session.data?.data?.ID && (
+                      <button
+                        className="rounded-full"
+                        onClick={() => {
+                          fileInputRef.current.click();
+                        }}
+                      >
+                        <div className="relative group w-[150px] h-[150px] rounded-full">
+                          <Image
+                            className="rounded-full absolute w-full h-full"
+                            src={`/api/item/image/${
+                              params.itemID
+                            }?timestamp=${Date.now()}`}
+                            width={150}
+                            height={150}
+                            alt="itemImage"
+                          />
+                          <div className="absolute w-full h-full rounded-full bg-black opacity-80 invisible group-hover:visible" />
+                          <div className="w-full h-full absolute invisible group-hover:visible rounded-full">
+                            <div className="w-full h-full flex place-items-center place-content-center rounded-full">
+                              <h1 className="text-white text-xl font-normal font-['Sarabun']">
+                                เปลี่ยนรูปภาพ
+                              </h1>
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    )}
+                  </div>
+                  <div className="w-full flex mb-5">
                     <div className="w-3/4 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
@@ -146,7 +203,7 @@ export default function EditItem({ params }) {
                     </div>
                     <div className="w-[5%] h-full"></div>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
                     <label className="w-[100%]">
                       <h4 className="text-xl font-normal font-['Sarabun']">
                         ชื่อสินค้า หรือวัตถุดิบ
@@ -159,7 +216,7 @@ export default function EditItem({ params }) {
                       />
                     </label>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
                     <div className="w-1/2 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
@@ -192,7 +249,7 @@ export default function EditItem({ params }) {
                       </label>
                     </div>
                   </div>
-                  <div className="w-full h-[200px] flex">
+                  <div className="w-full flex mb-5">
                     <div className="w-2/4 h-full flex">
                       <label className="w-[100%]">
                         <h4 className="text-xl font-normal font-['Sarabun']">
