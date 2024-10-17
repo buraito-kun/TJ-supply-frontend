@@ -190,7 +190,7 @@ export default function Expense() {
         </div>
       </div>
       <div className="w-full h-[30%] bg-white flex place-content-start place-items-center">
-        <h1 className="text-red-500 font-['Sarabun'] font-bold text-[80px]">
+        <h1 className="text-red-600 font-['Sarabun'] font-bold text-[80px]">
           ฿{" "}
           {Intl.NumberFormat("en-US", {
             notation: "compact",
