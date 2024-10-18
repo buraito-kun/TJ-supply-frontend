@@ -122,7 +122,7 @@ export default function EditItem({ params }) {
                   <BackButton text="ย้อนกลับ" />
                 </Link>
                 <h2 className="ml-20 text-black text-2xl font-bold font-['Sarabun']">
-                  แก้ไขสินค้า หรือวัตถุดิบเข้าระบบ
+                  แก้ไขสินค้า หรือวัตถุดิบ
                 </h2>
               </div>
               <div className="flex w-full place-content-end mr-20">
