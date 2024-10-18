@@ -175,7 +175,7 @@ export default function Expense() {
   };
   
   return (
-    <div className="w-full h-full border border-black rounded-2xl shadow-2xl">
+    <div className="w-full h-full border border-black rounded-2xl bg-white">
       <div className="w-full h-[10%] flex place-content-between place-items-center pl-5">
         <h1 className="text-black font-['Sarabun'] font-bold text-2xl">
           รายจ่าย
