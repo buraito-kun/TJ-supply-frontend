@@ -51,6 +51,9 @@ export default function ProductDemand() {
             },
           ],
         },
+        options: {
+          maintainAspectRatio: false,
+        }
       });
     }
   }, [productDemand]);

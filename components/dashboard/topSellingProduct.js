@@ -50,6 +50,9 @@ export default function TopSellingProduct() {
             },
           ],
         },
+        options: {
+          maintainAspectRatio: false,
+        }
       });
     }
   }, [topSellingProduct]);

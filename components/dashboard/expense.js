@@ -151,6 +151,7 @@ export default function Expense() {
           ],
         },
         options: {
+          maintainAspectRatio: false,
           plugins: {
             legend: {
               display: false,
