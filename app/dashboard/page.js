@@ -6,6 +6,14 @@ import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
+import Income from "@/components/dashboard/income";
+import Expense from "@/components/dashboard/expense";
+import Total from "@/components/dashboard/total";
+import TopSellingProduct from "@/components/dashboard/topSellingProduct";
+import ProductDemand from "@/components/dashboard/productDemand";
+import QcPassFail from "@/components/dashboard/qcPassFail";
+import PicknpayCount from "@/components/dashboard/picknpayCount";
+import TopWorker from "@/components/dashboard/topWorker";
 
 export default function Dashboard() {
   const session = useSession();
@@ -25,22 +33,49 @@ export default function Dashboard() {
         <SideBar className="flex w-auto h-auto" />
         <div className="flex flex-col w-full h-full">
           <Breadcrumb className="w-auto h-auto" />
-          <div className="flex flex-col bg-gray-700 w-full h-full overflow-y-auto whitespace-nowrap place-items-center pt-[20px]">
-            {/* <div className="bg-red-500 w-[500px] h-[500px] flex flex-col flex-shrink-0">
-
+          <div className="flex flex-col bg-gray-100 w-full h-full overflow-y-auto whitespace-nowrap place-items-center">
+            <div className="w-full flex flex-wrap pl-5 pr-5 pt-5">
+              <div className="w-1/4 h-[400px]">
+                <div className="w-full h-full p-2">
+                  <Income />
+                </div>
+              </div>
+              <div className="w-1/4 h-[400px]">
+                <div className="w-full h-full p-2">
+                  <Expense />
+                </div>
+              </div>
+              <div className="w-1/4 h-[400px]">
+                <div className="w-full h-full p-2">
+                  <Total />
+                </div>
+              </div>
+              <div className="w-1/4 h-[400px]">
+                <div className="w-full h-full p-2">
+                  <TopSellingProduct />
+                </div>
+              </div>
+              <div className="w-1/4 h-[400px]">
+                <div className="w-full h-full p-2">
+                  <ProductDemand />
+                </div>
+              </div>
+              <div className="w-1/4 h-[400px]">
+                <div className="w-full h-full p-2">
+                  <QcPassFail />
+                </div>
+              </div>
+              <div className="w-1/4 h-[400px]">
+                <div className="w-full h-full p-2">
+                  <PicknpayCount />
+                </div>
+              </div>
+              <div className="w-1/4 h-[400px]">
+                <div className="w-full h-full p-2">
+                  <TopWorker />
+                </div>
+              </div>
             </div>
-            <div className="bg-green-500 w-[500px] h-[500px] flex flex-shrink-0">
-
-            </div>
-            <div className="bg-blue-500 w-[500px] h-[500px] flex flex-shrink-0">
-
-            </div>
-            <div className="bg-purple-500 w-[500px] h-[500px] flex flex-shrink-0">
-
-            </div>
-            <div className="bg-yellow-500 w-[500px] h-[500px] flex flex-shrink-0">
-
-            </div> */}
             <div className="flex flex-col-reverse place-content-center">
               <Footer />
             </div>
