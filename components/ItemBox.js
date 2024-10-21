@@ -119,9 +119,11 @@ export default function ItemBox({ ...props }) {
                   {props.text}
                 </h4>
                 <div className="mb-2">
-                  <h5 className="text-black text-left text-sm font-['Sarabun']">
-                    ราคา: {props.costPrice}
-                  </h5>
+                  {role && (role[0] === "m" || role[5] === "f") && (
+                    <h5 className="text-black text-left text-sm font-['Sarabun']">
+                      ราคาซื้อ:{props.costPrice}, ขาย:{props.salePrice}
+                    </h5>
+                  )}
                   <h5 className="text-black text-left text-sm font-['Sarabun']">
                     จำนวน: {props.amount}
                   </h5>
