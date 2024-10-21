@@ -26,7 +26,8 @@ export default function Login() {
       });
 
       if (role[0] === "m") redirect("/dashboard");
-      else if (role[1] === "s" || role[3] === "w") redirect("/item");
+      else if (role[4] === "a") redirect("/user")
+      else if (role[1] === "s" || role[3] === "w" || role[5] === "f") redirect("/item");
       else if (role[2] === "t") redirect("/qc");
     } else if (session?.status === "unauthenticated") {
       Swal.fire({
