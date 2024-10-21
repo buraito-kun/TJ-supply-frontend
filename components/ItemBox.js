@@ -26,7 +26,7 @@ export default function ItemBox({ ...props }) {
                   </h4>
                   <div className="mb-2">
                     <h5 className="text-black text-left text-sm font-['Sarabun']">
-                      ราคา: {props.costPrice}
+                      ราคาซื้อ:{props.costPrice}, ขาย:{props.salePrice}
                     </h5>
                     <h5 className="text-black text-left text-sm font-['Sarabun']">
                       จำนวน: {props.amount}
