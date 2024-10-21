@@ -191,6 +191,7 @@ export default function Picknpay() {
                           href={`/item/picknpay/${data.ID}`}
                           text={data.name}
                           costPrice={data.costPrice}
+                          salePrice={data.salePrice}
                           amount={data.amount}
                           options
                           isFavourite={data.isFavourite}

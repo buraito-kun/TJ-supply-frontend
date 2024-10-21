@@ -131,6 +131,7 @@ export default function Item() {
                           href={`/item/info/${data.ID}`}
                           text={data.name}
                           costPrice={data.costPrice}
+                          salePrice={data.salePrice}
                           amount={data.amount}
                           options
                           isFavourite={data.isFavourite}
@@ -182,6 +183,7 @@ export default function Item() {
                           href={`/item/info/${data.item_ID}`}
                           text={data.item_name}
                           costPrice={data.item_costPrice}
+                          salePrice={data.item_salePrice}
                           amount={data.item_amount}
                           options
                           isFavourite={data.item_isFavourite}
