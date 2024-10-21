@@ -1,7 +1,11 @@
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ItemBox({ ...props }) {
+  const session = useSession();
+  const role = session?.data?.data?.role;
+
   return (
     <>
       <div className="w-[300px] h-[140px] bg-white mx-5 my-2 rounded-lg flex border shadow-md hover:cursor-pointer hover:shadow-2xl hover:scale-105 transition-transform">
@@ -25,9 +29,11 @@ export default function ItemBox({ ...props }) {
                     {props.text}
                   </h4>
                   <div className="mb-2">
-                    <h5 className="text-black text-left text-sm font-['Sarabun']">
-                      ราคาซื้อ:{props.costPrice}, ขาย:{props.salePrice}
-                    </h5>
+                    {role && (role[0] === "m" || role[5] === "f") && (
+                      <h5 className="text-black text-left text-sm font-['Sarabun']">
+                        ราคาซื้อ:{props.costPrice}, ขาย:{props.salePrice}
+                      </h5>
+                    )}
                     <h5 className="text-black text-left text-sm font-['Sarabun']">
                       จำนวน: {props.amount}
                     </h5>
