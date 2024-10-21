@@ -50,7 +50,7 @@ export default function InfoItem({ params }) {
   const fetchItemData = async () => {
     const res = await fetch(
       process.env.NEXT_PUBLIC_API_URL +
-        `items/construct/${params.itemID}?limit=50&page=${itemPage}&status=waiting&like=${like}`
+        `items/construct/${params.itemID}?limit=50&page=${itemPage}&status=all&like=${like}`
     );
     if (!res.ok) {
       throw new Error("Failed to fetch data");
@@ -135,11 +135,15 @@ export default function InfoItem({ params }) {
                                 <h3 className="text-[#13A452] bg-[#adff9d] w-12 text-sm rounded-xl">
                                   สำเร็จ
                                 </h3>
-                              ) : (
+                              ) : data.status === "waiting" ? (
                                 <h3 className="text-[#ff6600] bg-[#ffea8f] w-24 text-sm rounded-xl">
                                   รอการประกอบ
                                 </h3>
-                              )}
+                              ) : data.status === "sale" ? (
+                                <h3 className="text-[#ffffff] bg-[#ff0b03] w-16 text-sm rounded-xl">
+                                  ขายแล้ว
+                                </h3>
+                              ) : null}
                             </div>
                             <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                               {data.updatedAt.split("T")[0] +
