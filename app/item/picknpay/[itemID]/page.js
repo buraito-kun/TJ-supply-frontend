@@ -23,7 +23,7 @@ export default function AddPicknpay({ params }) {
 
   useEffect(() => {
     if (session?.status === "authenticated") {
-      if (role[0] !== "m" && role[1] !== "s") redirect("/");
+      if (role[0] !== "m" && role[1] !== "s" && role[3] !== "w") redirect("/");
     } else if (session?.status === "unauthenticated") {
       redirect("/");
     }

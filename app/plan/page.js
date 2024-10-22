@@ -24,7 +24,7 @@ export default function Plan() {
 
   useEffect(() => {
     if (session?.status === "authenticated") {
-      if (role[0] !== "m" && role[1] !== "s") redirect("/");
+      if (role[0] !== "m") redirect("/");
     } else if (session?.status === "unauthenticated") {
       redirect("/");
     }

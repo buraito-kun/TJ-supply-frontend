@@ -32,6 +32,7 @@ export default function User() {
 
   useEffect(() => {
     if (session?.status === "authenticated") {
+      if (role[0] !== "m" && role[4] !== "a") redirect("/");
       const checkIsUserExist = async () => {
         const res = await fetch(
           process.env.NEXT_PUBLIC_API_URL + `user/${session?.data?.data?.ID}`,
@@ -40,7 +41,6 @@ export default function User() {
         if (!res.ok) signOut();
       };
       checkIsUserExist();
-      if (role[0] !== "m") redirect("/");
     } else if (session?.status === "unauthenticated") {
       redirect("/");
     }
@@ -177,9 +177,7 @@ export default function User() {
     setWorkerPage(worker.allPage);
   };
   const increaseAdminPage = () => {
-    setAdminPage(
-      adminPage >= admin.allPage ? admin.allPage : adminPage + 1
-    );
+    setAdminPage(adminPage >= admin.allPage ? admin.allPage : adminPage + 1);
   };
   const decreaseAdminPage = () => {
     setAdminPage(adminPage <= 1 ? 1 : adminPage - 1);
@@ -216,14 +214,16 @@ export default function User() {
               <h2 className="ml-20 text-black text-2xl font-bold font-['Sarabun']">
                 รายชื่อผู้ใช้งาน
               </h2>
-              <div>
-                <Link href="/user/approve" className="mr-3">
-                  <SubmitButton text="อนุมัติพนักงาน" />
-                </Link>
-                <Link href="/user/actionHistory" className="mr-20">
-                  <SubmitButton text="ประวัติการใช้งาน" />
-                </Link>
-              </div>
+              {role && role[0] === "m" && (
+                <div>
+                  <Link href="/user/approve" className="mr-3">
+                    <SubmitButton text="อนุมัติพนักงาน" />
+                  </Link>
+                  <Link href="/user/actionHistory" className="mr-20">
+                    <SubmitButton text="ประวัติการใช้งาน" />
+                  </Link>
+                </div>
+              )}
             </div>
             {/*
 
@@ -246,21 +246,31 @@ export default function User() {
                   <div className="w-[95%] my-[20px]">
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
-                        <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้ใช้
-                        </div>
+                        {role && role[0] === "m" ? (
+                          <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        ) : (
+                          <div className="w-9/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        )}
                         <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
                           สถานะ
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           ข้อมูล
                         </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          แก้ไข
-                        </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          ลบ
-                        </div>
+                        {role && role[0] === "m" && (
+                          <>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              แก้ไข
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              ลบ
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="text-black">
@@ -270,12 +280,21 @@ export default function User() {
                             key={data.ID}
                             className="flex flex-row w-full h-12 hover:bg-gray-200"
                           >
-                            <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
-                              {Translator.user.icon}
-                              <h5 className="ml-5">
-                                {data.name + " " + data.surname}
-                              </h5>
-                            </div>
+                            {role && role[0] === "m" ? (
+                              <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            ) : (
+                              <div className="w-9/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            )}
                             <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                               <h5 className="bg-[#adff9d] w-10 text-sm text-[#13A452] rounded-xl">
                                 ปกติ
@@ -286,45 +305,49 @@ export default function User() {
                                 {Translator.info.icon}
                               </Link>
                             </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              <Link href={"/user/edit/" + data.ID}>
-                                {Translator.edit.icon}
-                              </Link>
-                            </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              {session?.data?.data?.ID !== data.ID ? (
-                                <button
-                                  onClick={() => {
-                                    Swal.fire({
-                                      title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
-                                      text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonColor: "#d33",
-                                      cancelButtonColor: "#3085d6",
-                                      confirmButtonText: "ตกลง",
-                                      cancelButtonText: "ยกเลิก",
-                                    }).then(async (result) => {
-                                      if (result.isConfirmed) {
-                                        await fetch(
-                                          process.env.NEXT_PUBLIC_API_URL +
-                                            `user/${data.ID}`,
-                                          { method: "DELETE" }
-                                        );
-                                        await refreshData();
+                            {role && role[0] === "m" && (
+                              <>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  <Link href={"/user/edit/" + data.ID}>
+                                    {Translator.edit.icon}
+                                  </Link>
+                                </div>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <button
+                                      onClick={() => {
                                         Swal.fire({
-                                          title: "ลบข้อมูลสำเร็จ",
-                                          text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
-                                          icon: "success",
+                                          title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
+                                          text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
+                                          icon: "warning",
+                                          showCancelButton: true,
+                                          confirmButtonColor: "#d33",
+                                          cancelButtonColor: "#3085d6",
+                                          confirmButtonText: "ตกลง",
+                                          cancelButtonText: "ยกเลิก",
+                                        }).then(async (result) => {
+                                          if (result.isConfirmed) {
+                                            await fetch(
+                                              process.env.NEXT_PUBLIC_API_URL +
+                                                `user/${data.ID}`,
+                                              { method: "DELETE" }
+                                            );
+                                            await refreshData();
+                                            Swal.fire({
+                                              title: "ลบข้อมูลสำเร็จ",
+                                              text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
+                                              icon: "success",
+                                            });
+                                          }
                                         });
-                                      }
-                                    });
-                                  }}
-                                >
-                                  {Translator.delete.icon}
-                                </button>
-                              ) : null}
-                            </div>
+                                      }}
+                                    >
+                                      {Translator.delete.icon}
+                                    </button>
+                                  ) : null}
+                                </div>
+                              </>
+                            )}
                           </div>
                         );
                       })}
@@ -364,21 +387,31 @@ export default function User() {
                   <div className="w-[95%] my-[20px]">
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
-                        <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้ใช้
-                        </div>
+                        {role && role[0] === "m" ? (
+                          <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        ) : (
+                          <div className="w-9/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        )}
                         <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
                           สถานะ
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           ข้อมูล
                         </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          แก้ไข
-                        </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          ลบ
-                        </div>
+                        {role && role[0] === "m" && (
+                          <>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              แก้ไข
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              ลบ
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="text-black">
@@ -388,12 +421,21 @@ export default function User() {
                             key={data.ID}
                             className="flex flex-row w-full h-12 hover:bg-gray-200"
                           >
-                            <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
-                              {Translator.user.icon}
-                              <h5 className="ml-5">
-                                {data.name + " " + data.surname}
-                              </h5>
-                            </div>
+                            {role && role[0] === "m" ? (
+                              <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            ) : (
+                              <div className="w-9/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            )}
                             <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                               <h5 className="bg-[#adff9d] w-10 text-sm text-[#13A452] rounded-xl">
                                 ปกติ
@@ -404,45 +446,49 @@ export default function User() {
                                 {Translator.info.icon}
                               </Link>
                             </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              <Link href={"/user/edit/" + data.ID}>
-                                {Translator.edit.icon}
-                              </Link>
-                            </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              {session?.data?.data?.ID !== data.ID ? (
-                                <button
-                                  onClick={() => {
-                                    Swal.fire({
-                                      title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
-                                      text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonColor: "#d33",
-                                      cancelButtonColor: "#3085d6",
-                                      confirmButtonText: "ตกลง",
-                                      cancelButtonText: "ยกเลิก",
-                                    }).then(async (result) => {
-                                      if (result.isConfirmed) {
-                                        await fetch(
-                                          process.env.NEXT_PUBLIC_API_URL +
-                                            `user/${data.ID}`,
-                                          { method: "DELETE" }
-                                        );
-                                        await refreshData();
+                            {role && role[0] === "m" && (
+                              <>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  <Link href={"/user/edit/" + data.ID}>
+                                    {Translator.edit.icon}
+                                  </Link>
+                                </div>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <button
+                                      onClick={() => {
                                         Swal.fire({
-                                          title: "ลบข้อมูลสำเร็จ",
-                                          text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
-                                          icon: "success",
+                                          title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
+                                          text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
+                                          icon: "warning",
+                                          showCancelButton: true,
+                                          confirmButtonColor: "#d33",
+                                          cancelButtonColor: "#3085d6",
+                                          confirmButtonText: "ตกลง",
+                                          cancelButtonText: "ยกเลิก",
+                                        }).then(async (result) => {
+                                          if (result.isConfirmed) {
+                                            await fetch(
+                                              process.env.NEXT_PUBLIC_API_URL +
+                                                `user/${data.ID}`,
+                                              { method: "DELETE" }
+                                            );
+                                            await refreshData();
+                                            Swal.fire({
+                                              title: "ลบข้อมูลสำเร็จ",
+                                              text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
+                                              icon: "success",
+                                            });
+                                          }
                                         });
-                                      }
-                                    });
-                                  }}
-                                >
-                                  {Translator.delete.icon}
-                                </button>
-                              ) : null}
-                            </div>
+                                      }}
+                                    >
+                                      {Translator.delete.icon}
+                                    </button>
+                                  ) : null}
+                                </div>
+                              </>
+                            )}
                           </div>
                         );
                       })}
@@ -482,21 +528,31 @@ export default function User() {
                   <div className="w-[95%] my-[20px]">
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
-                        <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้ใช้
-                        </div>
+                        {role && role[0] === "m" ? (
+                          <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        ) : (
+                          <div className="w-9/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        )}
                         <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
                           สถานะ
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           ข้อมูล
                         </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          แก้ไข
-                        </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          ลบ
-                        </div>
+                        {role && role[0] === "m" && (
+                          <>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              แก้ไข
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              ลบ
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="text-black">
@@ -506,12 +562,21 @@ export default function User() {
                             key={data.ID}
                             className="flex flex-row w-full h-12 hover:bg-gray-200"
                           >
-                            <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
-                              {Translator.user.icon}
-                              <h5 className="ml-5">
-                                {data.name + " " + data.surname}
-                              </h5>
-                            </div>
+                            {role && role[0] === "m" ? (
+                              <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            ) : (
+                              <div className="w-9/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            )}
                             <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                               <h5 className="bg-[#adff9d] w-10 text-sm text-[#13A452] rounded-xl">
                                 ปกติ
@@ -522,45 +587,49 @@ export default function User() {
                                 {Translator.info.icon}
                               </Link>
                             </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              <Link href={"/user/edit/" + data.ID}>
-                                {Translator.edit.icon}
-                              </Link>
-                            </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              {session?.data?.data?.ID !== data.ID ? (
-                                <button
-                                  onClick={() => {
-                                    Swal.fire({
-                                      title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
-                                      text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonColor: "#d33",
-                                      cancelButtonColor: "#3085d6",
-                                      confirmButtonText: "ตกลง",
-                                      cancelButtonText: "ยกเลิก",
-                                    }).then(async (result) => {
-                                      if (result.isConfirmed) {
-                                        await fetch(
-                                          process.env.NEXT_PUBLIC_API_URL +
-                                            `user/${data.ID}`,
-                                          { method: "DELETE" }
-                                        );
-                                        await refreshData();
+                            {role && role[0] === "m" && (
+                              <>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  <Link href={"/user/edit/" + data.ID}>
+                                    {Translator.edit.icon}
+                                  </Link>
+                                </div>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <button
+                                      onClick={() => {
                                         Swal.fire({
-                                          title: "ลบข้อมูลสำเร็จ",
-                                          text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
-                                          icon: "success",
+                                          title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
+                                          text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
+                                          icon: "warning",
+                                          showCancelButton: true,
+                                          confirmButtonColor: "#d33",
+                                          cancelButtonColor: "#3085d6",
+                                          confirmButtonText: "ตกลง",
+                                          cancelButtonText: "ยกเลิก",
+                                        }).then(async (result) => {
+                                          if (result.isConfirmed) {
+                                            await fetch(
+                                              process.env.NEXT_PUBLIC_API_URL +
+                                                `user/${data.ID}`,
+                                              { method: "DELETE" }
+                                            );
+                                            await refreshData();
+                                            Swal.fire({
+                                              title: "ลบข้อมูลสำเร็จ",
+                                              text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
+                                              icon: "success",
+                                            });
+                                          }
                                         });
-                                      }
-                                    });
-                                  }}
-                                >
-                                  {Translator.delete.icon}
-                                </button>
-                              ) : null}
-                            </div>
+                                      }}
+                                    >
+                                      {Translator.delete.icon}
+                                    </button>
+                                  ) : null}
+                                </div>
+                              </>
+                            )}
                           </div>
                         );
                       })}
@@ -600,21 +669,31 @@ export default function User() {
                   <div className="w-[95%] my-[20px]">
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
-                        <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้ใช้
-                        </div>
+                        {role && role[0] === "m" ? (
+                          <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        ) : (
+                          <div className="w-9/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        )}
                         <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
                           สถานะ
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           ข้อมูล
                         </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          แก้ไข
-                        </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          ลบ
-                        </div>
+                        {role && role[0] === "m" && (
+                          <>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              แก้ไข
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              ลบ
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="text-black">
@@ -624,12 +703,21 @@ export default function User() {
                             key={data.ID}
                             className="flex flex-row w-full h-12 hover:bg-gray-200"
                           >
-                            <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
-                              {Translator.user.icon}
-                              <h5 className="ml-5">
-                                {data.name + " " + data.surname}
-                              </h5>
-                            </div>
+                            {role && role[0] === "m" ? (
+                              <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            ) : (
+                              <div className="w-9/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            )}
                             <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                               <h5 className="bg-[#adff9d] w-10 text-sm text-[#13A452] rounded-xl">
                                 ปกติ
@@ -640,45 +728,49 @@ export default function User() {
                                 {Translator.info.icon}
                               </Link>
                             </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              <Link href={"/user/edit/" + data.ID}>
-                                {Translator.edit.icon}
-                              </Link>
-                            </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              {session?.data?.data?.ID !== data.ID ? (
-                                <button
-                                  onClick={() => {
-                                    Swal.fire({
-                                      title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
-                                      text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonColor: "#d33",
-                                      cancelButtonColor: "#3085d6",
-                                      confirmButtonText: "ตกลง",
-                                      cancelButtonText: "ยกเลิก",
-                                    }).then(async (result) => {
-                                      if (result.isConfirmed) {
-                                        await fetch(
-                                          process.env.NEXT_PUBLIC_API_URL +
-                                            `user/${data.ID}`,
-                                          { method: "DELETE" }
-                                        );
-                                        await refreshData();
+                            {role && role[0] === "m" && (
+                              <>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  <Link href={"/user/edit/" + data.ID}>
+                                    {Translator.edit.icon}
+                                  </Link>
+                                </div>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <button
+                                      onClick={() => {
                                         Swal.fire({
-                                          title: "ลบข้อมูลสำเร็จ",
-                                          text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
-                                          icon: "success",
+                                          title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
+                                          text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
+                                          icon: "warning",
+                                          showCancelButton: true,
+                                          confirmButtonColor: "#d33",
+                                          cancelButtonColor: "#3085d6",
+                                          confirmButtonText: "ตกลง",
+                                          cancelButtonText: "ยกเลิก",
+                                        }).then(async (result) => {
+                                          if (result.isConfirmed) {
+                                            await fetch(
+                                              process.env.NEXT_PUBLIC_API_URL +
+                                                `user/${data.ID}`,
+                                              { method: "DELETE" }
+                                            );
+                                            await refreshData();
+                                            Swal.fire({
+                                              title: "ลบข้อมูลสำเร็จ",
+                                              text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
+                                              icon: "success",
+                                            });
+                                          }
                                         });
-                                      }
-                                    });
-                                  }}
-                                >
-                                  {Translator.delete.icon}
-                                </button>
-                              ) : null}
-                            </div>
+                                      }}
+                                    >
+                                      {Translator.delete.icon}
+                                    </button>
+                                  ) : null}
+                                </div>
+                              </>
+                            )}
                           </div>
                         );
                       })}
@@ -718,21 +810,31 @@ export default function User() {
                   <div className="w-[95%] my-[20px]">
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
-                        <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้ใช้
-                        </div>
+                        {role && role[0] === "m" ? (
+                          <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        ) : (
+                          <div className="w-9/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        )}
                         <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
                           สถานะ
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           ข้อมูล
                         </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          แก้ไข
-                        </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          ลบ
-                        </div>
+                        {role && role[0] === "m" && (
+                          <>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              แก้ไข
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              ลบ
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="text-black">
@@ -742,12 +844,21 @@ export default function User() {
                             key={data.ID}
                             className="flex flex-row w-full h-12 hover:bg-gray-200"
                           >
-                            <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
-                              {Translator.user.icon}
-                              <h5 className="ml-5">
-                                {data.name + " " + data.surname}
-                              </h5>
-                            </div>
+                            {role && role[0] === "m" ? (
+                              <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            ) : (
+                              <div className="w-9/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            )}
                             <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                               <h5 className="bg-[#adff9d] w-10 text-sm text-[#13A452] rounded-xl">
                                 ปกติ
@@ -758,45 +869,49 @@ export default function User() {
                                 {Translator.info.icon}
                               </Link>
                             </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              <Link href={"/user/edit/" + data.ID}>
-                                {Translator.edit.icon}
-                              </Link>
-                            </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              {session?.data?.data?.ID !== data.ID ? (
-                                <button
-                                  onClick={() => {
-                                    Swal.fire({
-                                      title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
-                                      text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonColor: "#d33",
-                                      cancelButtonColor: "#3085d6",
-                                      confirmButtonText: "ตกลง",
-                                      cancelButtonText: "ยกเลิก",
-                                    }).then(async (result) => {
-                                      if (result.isConfirmed) {
-                                        await fetch(
-                                          process.env.NEXT_PUBLIC_API_URL +
-                                            `user/${data.ID}`,
-                                          { method: "DELETE" }
-                                        );
-                                        await refreshData();
+                            {role && role[0] === "m" && (
+                              <>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  <Link href={"/user/edit/" + data.ID}>
+                                    {Translator.edit.icon}
+                                  </Link>
+                                </div>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <button
+                                      onClick={() => {
                                         Swal.fire({
-                                          title: "ลบข้อมูลสำเร็จ",
-                                          text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
-                                          icon: "success",
+                                          title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
+                                          text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
+                                          icon: "warning",
+                                          showCancelButton: true,
+                                          confirmButtonColor: "#d33",
+                                          cancelButtonColor: "#3085d6",
+                                          confirmButtonText: "ตกลง",
+                                          cancelButtonText: "ยกเลิก",
+                                        }).then(async (result) => {
+                                          if (result.isConfirmed) {
+                                            await fetch(
+                                              process.env.NEXT_PUBLIC_API_URL +
+                                                `user/${data.ID}`,
+                                              { method: "DELETE" }
+                                            );
+                                            await refreshData();
+                                            Swal.fire({
+                                              title: "ลบข้อมูลสำเร็จ",
+                                              text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
+                                              icon: "success",
+                                            });
+                                          }
                                         });
-                                      }
-                                    });
-                                  }}
-                                >
-                                  {Translator.delete.icon}
-                                </button>
-                              ) : null}
-                            </div>
+                                      }}
+                                    >
+                                      {Translator.delete.icon}
+                                    </button>
+                                  ) : null}
+                                </div>
+                              </>
+                            )}
                           </div>
                         );
                       })}
@@ -836,21 +951,31 @@ export default function User() {
                   <div className="w-[95%] my-[20px]">
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
-                        <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้ใช้
-                        </div>
+                        {role && role[0] === "m" ? (
+                          <div className="w-7/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        ) : (
+                          <div className="w-9/12 text-center text-lg font-bold font-['Sarabun']">
+                            ชื่อผู้ใช้
+                          </div>
+                        )}
                         <div className="w-2/12 text-center text-lg font-bold font-['Sarabun']">
                           สถานะ
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           ข้อมูล
                         </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          แก้ไข
-                        </div>
-                        <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
-                          ลบ
-                        </div>
+                        {role && role[0] === "m" && (
+                          <>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              แก้ไข
+                            </div>
+                            <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
+                              ลบ
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="text-black">
@@ -860,12 +985,21 @@ export default function User() {
                             key={data.ID}
                             className="flex flex-row w-full h-12 hover:bg-gray-200"
                           >
-                            <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
-                              {Translator.user.icon}
-                              <h5 className="ml-5">
-                                {data.name + " " + data.surname}
-                              </h5>
-                            </div>
+                            {role && role[0] === "m" ? (
+                              <div className="w-7/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            ) : (
+                              <div className="w-9/12 text-start text-lg font-['Sarabun'] flex place-items-center">
+                                {Translator.user.icon}
+                                <h5 className="ml-5">
+                                  {data.name + " " + data.surname}
+                                </h5>
+                              </div>
+                            )}
                             <div className="w-2/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                               <h5 className="bg-[#adff9d] w-10 text-sm text-[#13A452] rounded-xl">
                                 ปกติ
@@ -876,45 +1010,49 @@ export default function User() {
                                 {Translator.info.icon}
                               </Link>
                             </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              <Link href={"/user/edit/" + data.ID}>
-                                {Translator.edit.icon}
-                              </Link>
-                            </div>
-                            <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              {session?.data?.data?.ID !== data.ID ? (
-                                <button
-                                  onClick={() => {
-                                    Swal.fire({
-                                      title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
-                                      text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonColor: "#d33",
-                                      cancelButtonColor: "#3085d6",
-                                      confirmButtonText: "ตกลง",
-                                      cancelButtonText: "ยกเลิก",
-                                    }).then(async (result) => {
-                                      if (result.isConfirmed) {
-                                        await fetch(
-                                          process.env.NEXT_PUBLIC_API_URL +
-                                            `user/${data.ID}`,
-                                          { method: "DELETE" }
-                                        );
-                                        await refreshData();
+                            {role && role[0] === "m" && (
+                              <>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  <Link href={"/user/edit/" + data.ID}>
+                                    {Translator.edit.icon}
+                                  </Link>
+                                </div>
+                                <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <button
+                                      onClick={() => {
                                         Swal.fire({
-                                          title: "ลบข้อมูลสำเร็จ",
-                                          text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
-                                          icon: "success",
+                                          title: `ลบข้อมูล "${data.name} ${data.surname}" จริงหรือไม่`,
+                                          text: "หลังจากลบไปแล้วข้อมูลที่เกี่ยวข้องทั้งหมดจะถูกลบไปด้วย",
+                                          icon: "warning",
+                                          showCancelButton: true,
+                                          confirmButtonColor: "#d33",
+                                          cancelButtonColor: "#3085d6",
+                                          confirmButtonText: "ตกลง",
+                                          cancelButtonText: "ยกเลิก",
+                                        }).then(async (result) => {
+                                          if (result.isConfirmed) {
+                                            await fetch(
+                                              process.env.NEXT_PUBLIC_API_URL +
+                                                `user/${data.ID}`,
+                                              { method: "DELETE" }
+                                            );
+                                            await refreshData();
+                                            Swal.fire({
+                                              title: "ลบข้อมูลสำเร็จ",
+                                              text: `ข้อมูลเกี่ยวกับ "${data.name} ${data.surname}" ถูกลบสำเร็จ`,
+                                              icon: "success",
+                                            });
+                                          }
                                         });
-                                      }
-                                    });
-                                  }}
-                                >
-                                  {Translator.delete.icon}
-                                </button>
-                              ) : null}
-                            </div>
+                                      }}
+                                    >
+                                      {Translator.delete.icon}
+                                    </button>
+                                  ) : null}
+                                </div>
+                              </>
+                            )}
                           </div>
                         );
                       })}

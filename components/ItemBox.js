@@ -9,7 +9,7 @@ export default function ItemBox({ ...props }) {
   return (
     <>
       <div className="w-[300px] h-[140px] bg-white mx-5 my-2 rounded-lg flex border shadow-md hover:cursor-pointer hover:shadow-2xl hover:scale-105 transition-transform">
-        {props.options ? (
+        {props.options && role && (role[0] === "m" || role[1] === "s") ? (
           <>
             <div className="w-[90%] h-full">
               <Link href={props.href} className="flex w-full h-full">

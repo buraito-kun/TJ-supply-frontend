@@ -23,7 +23,7 @@ export default function ItemType() {
 
   useEffect(() => {
     if (session?.status === "authenticated") {
-      if (role[0] !== "m") redirect("/");
+      if (role[0] !== "m" && role[1] !== "s") redirect("/");
     } else if (session?.status === "unauthenticated") {
       redirect("/");
     }

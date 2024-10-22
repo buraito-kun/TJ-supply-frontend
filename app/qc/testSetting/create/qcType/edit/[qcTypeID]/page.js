@@ -19,7 +19,7 @@ export default function EditQcType({ params }) {
 
   useEffect(() => {
     if (session?.status === "authenticated") {
-      if (role[0] !== "m") redirect("/");
+      if (role[0] !== "m" && role[2] !== "t") redirect("/");
     } else if (session?.status === "unauthenticated") {
       redirect("/");
     }

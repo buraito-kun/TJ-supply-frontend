@@ -39,7 +39,7 @@ export default function AddUser({ params }) {
 
   useEffect(() => {
     if (session?.status === "authenticated") {
-      if (role[0] !== "m") redirect("/");
+      if (role[0] !== "m" && role[4] !== "a") redirect("/");
     } else if (session?.status === "unauthenticated") {
       redirect("/");
     }

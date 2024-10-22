@@ -23,7 +23,13 @@ export default function Item() {
 
   useEffect(() => {
     if (session?.status === "authenticated") {
-      if (role[0] !== "m" && role[1] !== "s" && role[3] !== "w") redirect("/");
+      if (
+        role[0] !== "m" &&
+        role[1] !== "s" &&
+        role[3] !== "w" &&
+        role[5] === "f"
+      )
+        redirect("/");
     } else if (session?.status === "unauthenticated") {
       redirect("/");
     }
@@ -97,15 +103,22 @@ export default function Item() {
                 รายการสิ่งของ
               </h2>
               <div className="pr-20">
-                <Link href="/item/picknpay" className="pr-2">
-                  <SubmitButton text="เบิก/จ่ายสินค้า" />
-                </Link>
-                <Link href="/item/order" className="pr-2">
-                  <SubmitButton text="สั่งซื้อสินค้า" />
-                </Link>
-                <Link href="/item/add" className="">
-                  <SubmitButton text="เพิ่มสินค้าเข้าระบบ" />
-                </Link>
+                {role &&
+                  (role[0] === "m" || role[1] === "s" || role[3] === "w") && (
+                    <Link href="/item/picknpay" className="pr-2">
+                      <SubmitButton text="เบิก/จ่ายสินค้า" />
+                    </Link>
+                  )}
+                {role && (role[0] === "m" || role[1] === "s") && (
+                  <>
+                    <Link href="/item/order" className="pr-2">
+                      <SubmitButton text="สั่งซื้อสินค้า" />
+                    </Link>
+                    <Link href="/item/add" className="">
+                      <SubmitButton text="เพิ่มสินค้าเข้าระบบ" />
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
             <div className="flex flex-col w-full mt-[50px]">

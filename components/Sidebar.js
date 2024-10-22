@@ -36,10 +36,14 @@ export default function SideBar() {
       menus.construct = Translator.construct;
       menus.qc = Translator.qc;
     }
+    if (role[4] === "a") {
+      menus.user = Translator.user;
+    }
+    if (role[5] === "f") {
+      menus.item = Translator.item;
+    }
     if (role[1] === "s") {
       menus.item = Translator.item;
-      menus.plan = Translator.plan;
-      menus.formula = Translator.formula;
       menus.construct = Translator.construct;
     }
     if (role[3] === "w") {
