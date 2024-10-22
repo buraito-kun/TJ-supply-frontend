@@ -27,7 +27,7 @@ export default function Item() {
         role[0] !== "m" &&
         role[1] !== "s" &&
         role[3] !== "w" &&
-        role[5] === "f"
+        role[5] !== "f"
       )
         redirect("/");
     } else if (session?.status === "unauthenticated") {
