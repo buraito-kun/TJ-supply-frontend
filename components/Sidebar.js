@@ -16,7 +16,7 @@ export default function SideBar() {
     const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "user/logout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userID: session.data.ID }),
+      body: JSON.stringify({ userID: session.data.data.ID }),
     });
     if (!res.ok) {
       throw new Error("Failed to fetch data");
