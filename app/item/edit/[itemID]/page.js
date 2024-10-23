@@ -8,7 +8,6 @@ import { useState, useEffect, useRef } from "react";
 import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
-import Select from "react-select";
 import SubmitButton from "@/components/SubmitButton";
 import Swal from "sweetalert2";
 import Image from "next/image";
@@ -27,13 +26,6 @@ export default function EditItem({ params }) {
 
   const [items, setItems] = useState([]);
 
-  const roles = [
-    { value: "manager", label: "ผู้ดูแลระบบ" },
-    { value: "storager", label: "ผู้ดูแลคลัง" },
-    { value: "tester", label: "ผู้ทดสอบ" },
-    { value: "worker", label: "แรงงาน" },
-  ];
-
   useEffect(() => {
     if (session?.status === "authenticated") {
       if (role[0] !== "m" && role[1] !== "s") redirect("/");
@@ -45,52 +37,50 @@ export default function EditItem({ params }) {
   }, [session, role]);
 
   const updateItem = async () => {
-    if (true) {
-      const res = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + `items/${params.itemID}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            costPrice: Number(costPrice),
-            salePrice: Number(salePrice),
-            insurancePeriod: Number(insurance),
-            isFavourite: favourite,
-            amount: Number(amount),
-            detail: detail,
-          }),
-        }
-      );
-      if (!res.ok) {
-        Swal.fire({
-          icon: "error",
-          title: "ตรวจสอบข้อมูลใหม่อีกครั้ง",
-          text: "ชื่อผู้ใช้งานและอีเมล์ไม่สามารถซ้ำกับของที่มีอยู่ได้ และข้อมูลที่จำเป็นต้องกรอกกรอกครบเรียบร้อยแล้ว",
-        });
-      } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "บันทึกข้อมูลเรียบร้อย",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        setTimeout(() => {
-          router.refresh();
-        }, 1500);
+    const res = await fetch(
+      process.env.NEXT_PUBLIC_API_URL + `items/${params.itemID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          costPrice: Number(costPrice),
+          salePrice: Number(salePrice),
+          insurancePeriod: Number(insurance),
+          isFavourite: favourite,
+          amount: Number(amount),
+          detail: detail,
+        }),
       }
-    } else {
+    );
+    if (!res.ok) {
       Swal.fire({
         icon: "error",
-        title: "กรอกข้อมูลไม่ครบ",
-        text: "กรุณากรอกข้อมูลให้ครบตามช่องที่มี * สีแดง",
+        title: "ตรวจสอบข้อมูลใหม่อีกครั้ง",
+        text: "ชื่อผู้ใช้งานและอีเมล์ไม่สามารถซ้ำกับของที่มีอยู่ได้ และข้อมูลที่จำเป็นต้องกรอกกรอกครบเรียบร้อยแล้ว",
       });
+    } else {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "บันทึกข้อมูลเรียบร้อย",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        router.refresh();
+      }, 1500);
     }
   };
 
   const fetchData = async () => {
     const data = await fetchItemData();
     setItems(data);
+    setCostPrice(data.data.costPrice);
+    setSalePrice(data.data.salePrice);
+    setInsurance(data.data.insurancePeriod);
+    setFavourite(data.data.favourite);
+    setAmount(data.data.amount);
+    setDetail(data.data.detail);
   };
 
   const fetchItemData = async () => {
