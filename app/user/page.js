@@ -308,9 +308,11 @@ export default function User() {
                             {role && role[0] === "m" && (
                               <>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                                  <Link href={"/user/edit/" + data.ID}>
-                                    {Translator.edit.icon}
-                                  </Link>
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <Link href={"/user/edit/" + data.ID}>
+                                      {Translator.edit.icon}
+                                    </Link>
+                                  ) : null}
                                 </div>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                                   {session?.data?.data?.ID !== data.ID ? (
@@ -449,9 +451,11 @@ export default function User() {
                             {role && role[0] === "m" && (
                               <>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                                  <Link href={"/user/edit/" + data.ID}>
-                                    {Translator.edit.icon}
-                                  </Link>
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <Link href={"/user/edit/" + data.ID}>
+                                      {Translator.edit.icon}
+                                    </Link>
+                                  ) : null}
                                 </div>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                                   {session?.data?.data?.ID !== data.ID ? (
@@ -590,9 +594,11 @@ export default function User() {
                             {role && role[0] === "m" && (
                               <>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                                  <Link href={"/user/edit/" + data.ID}>
-                                    {Translator.edit.icon}
-                                  </Link>
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <Link href={"/user/edit/" + data.ID}>
+                                      {Translator.edit.icon}
+                                    </Link>
+                                  ) : null}
                                 </div>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                                   {session?.data?.data?.ID !== data.ID ? (
@@ -731,9 +737,11 @@ export default function User() {
                             {role && role[0] === "m" && (
                               <>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                                  <Link href={"/user/edit/" + data.ID}>
-                                    {Translator.edit.icon}
-                                  </Link>
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <Link href={"/user/edit/" + data.ID}>
+                                      {Translator.edit.icon}
+                                    </Link>
+                                  ) : null}
                                 </div>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                                   {session?.data?.data?.ID !== data.ID ? (
@@ -865,9 +873,11 @@ export default function User() {
                               </h5>
                             </div>
                             <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                              <Link href={"/user/info/" + data.ID}>
-                                {Translator.info.icon}
-                              </Link>
+                              {session?.data?.data?.ID !== data.ID ? (
+                                <Link href={"/user/info/" + data.ID}>
+                                  {Translator.info.icon}
+                                </Link>
+                              ) : null}
                             </div>
                             {role && role[0] === "m" && (
                               <>
@@ -1013,9 +1023,11 @@ export default function User() {
                             {role && role[0] === "m" && (
                               <>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
-                                  <Link href={"/user/edit/" + data.ID}>
-                                    {Translator.edit.icon}
-                                  </Link>
+                                  {session?.data?.data?.ID !== data.ID ? (
+                                    <Link href={"/user/edit/" + data.ID}>
+                                      {Translator.edit.icon}
+                                    </Link>
+                                  ) : null}
                                 </div>
                                 <div className="w-1/12 text-center text-lg font-['Sarabun'] flex place-content-center place-items-center">
                                   {session?.data?.data?.ID !== data.ID ? (
