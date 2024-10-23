@@ -262,12 +262,12 @@ export default function EditItem({ params }) {
                           จำนวน
                         </h4>
                         <input
-                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md"
+                          className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md cursor-not-allowed"
                           type="number"
                           min={0}
                           defaultValue={items?.data?.amount}
                           onChange={(e) => setAmount(e.target.value)}
-                          required
+                          disabled
                         />
                       </label>
                     </div>
