@@ -73,6 +73,7 @@ export default function QcType() {
           showConfirmButton: false,
           timer: 1500,
         });
+        setName("")
         refreshData();
       }
     } else {
@@ -130,6 +131,7 @@ export default function QcType() {
                     type="text"
                     className="h-[50px] border border-black px-3 text-black text-2xl font-normal font-['Sarabun'] rounded-md"
                     placeholder="ชื่อประเภทการทดสอบ"
+                    value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </label>

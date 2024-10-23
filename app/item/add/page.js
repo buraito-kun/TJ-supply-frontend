@@ -64,10 +64,7 @@ export default function AddItem() {
           title: "บันทึกข้อมูลเรียบร้อย",
           showConfirmButton: false,
           timer: 1500,
-        });
-        setTimeout(() => {
-          router.refresh();
-        }, 1500);
+        }).then(()=>window.location.reload());
       }
     } else {
       Swal.fire({

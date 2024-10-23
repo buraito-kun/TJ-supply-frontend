@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
 import SubmitButton from "@/components/SubmitButton";
@@ -14,7 +14,6 @@ import Select from "react-select";
 
 export default function CreateQcProject() {
   const session = useSession();
-  const router = useRouter();
   const role = session?.data?.data?.role;
 
   const [formulaProjectList, setFormulaProjectList] = useState([]);
@@ -59,10 +58,7 @@ export default function CreateQcProject() {
           title: "บันทึกข้อมูลเรียบร้อย",
           showConfirmButton: false,
           timer: 1500,
-        });
-        setTimeout(() => {
-          router.refresh();
-        }, 1500);
+        }).then(()=>window.location.reload());
       }
     } else {
       Swal.fire({

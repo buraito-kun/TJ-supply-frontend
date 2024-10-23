@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import SideBar from "@/components/Sidebar";
 import Breadcrumb from "@/components/Breadcrumb";
 import { redirect } from "next/navigation";
-import CircleImageButton from "@/components/CircleImageButton";
 import Footer from "@/components/Footer";
 import SubmitButton from "@/components/SubmitButton";
 import Pagination from "@/components/Pagination";
@@ -74,6 +73,7 @@ export default function ItemType() {
           showConfirmButton: false,
           timer: 1500,
         });
+        setItemTypeName("")
         refreshData();
       }
     } else {
@@ -131,6 +131,7 @@ export default function ItemType() {
                     type="text"
                     className="h-[50px] border border-black px-3 text-black text-2xl font-normal font-['Sarabun'] rounded-md"
                     placeholder="ชื่อประเภทสิ่งของ"
+                    value={itemTypeName}
                     onChange={(e) => setItemTypeName(e.target.value)}
                   />
                 </label>

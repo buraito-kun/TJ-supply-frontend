@@ -5,7 +5,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Footer from "@/components/Footer";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import BackButton from "@/components/BackButton";
 import Select from "react-select";
@@ -14,7 +14,6 @@ import Swal from "sweetalert2";
 
 export default function AddUser({ params }) {
   const session = useSession();
-  const router = useRouter();
   const role = session?.data?.data?.role;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -127,10 +126,7 @@ export default function AddUser({ params }) {
           title: "บันทึกข้อมูลเรียบร้อย",
           showConfirmButton: false,
           timer: 1500,
-        });
-        setTimeout(() => {
-          router.refresh();
-        }, 1500);
+        }).then(()=>window.location.reload());
       }
     } else {
       Swal.fire({
