@@ -184,7 +184,7 @@ export default function EditItem({ params }) {
                           ประเภทสิ่งของ
                         </h4>
                         <input
-                          className="h-[50px] w-full pl-5 border border-black mt-1 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center place-content-start hover:cursor-not-allowed"
+                          className="h-[50px] w-full pl-5 border border-black mt-1 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-start place-content-start hover:cursor-not-allowed"
                           type="text"
                           value={items?.data?.itemType.name}
                           disabled
@@ -199,7 +199,7 @@ export default function EditItem({ params }) {
                         ชื่อสินค้า หรือวัตถุดิบ
                       </h4>
                       <input
-                        className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-center place-content-start hover:cursor-not-allowed"
+                        className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-start place-content-start hover:cursor-not-allowed"
                         type="text"
                         value={items?.data?.name}
                         disabled
