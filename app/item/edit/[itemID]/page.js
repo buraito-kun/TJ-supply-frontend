@@ -17,6 +17,7 @@ export default function EditItem({ params }) {
   const router = useRouter();
   const fileInputRef = useRef();
   const role = session?.data?.data?.role;
+  const [name, setName] = useState("")
   const [costPrice, setCostPrice] = useState(0);
   const [salePrice, setSalePrice] = useState(0);
   const [insurance, setInsurance] = useState(0);
@@ -43,6 +44,7 @@ export default function EditItem({ params }) {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          name: name,
           costPrice: Number(costPrice),
           salePrice: Number(salePrice),
           insurancePeriod: Number(insurance),
@@ -75,6 +77,7 @@ export default function EditItem({ params }) {
   const fetchData = async () => {
     const data = await fetchItemData();
     setItems(data);
+    setName(data.data.name)
     setCostPrice(data.data.costPrice);
     setSalePrice(data.data.salePrice);
     setInsurance(data.data.insurancePeriod);
@@ -199,10 +202,10 @@ export default function EditItem({ params }) {
                         ชื่อสินค้า หรือวัตถุดิบ
                       </h4>
                       <input
-                        className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-start place-content-start hover:cursor-not-allowed"
+                        className="h-[50px] w-full border border-black mt-1 px-3 text-2xl font-normal font-['Sarabun'] rounded-md flex place-items-start place-content-start"
                         type="text"
-                        value={items?.data?.name}
-                        disabled
+                        value={name}
+                        onChange={e=>setName(e.target.value)}
                       />
                     </label>
                   </div>
