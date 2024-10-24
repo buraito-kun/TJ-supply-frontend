@@ -370,7 +370,7 @@ export default function Picknpay() {
                                   <button
                                     onClick={async () => {
                                       Swal.fire({
-                                        title: `ลบคำขอเบิกสินค้า จริงหรือไม่`,
+                                        title: `ลบคำขอเบิกวัตถุดิบ จริงหรือไม่`,
                                         text: "",
                                         icon: "warning",
                                         showCancelButton: true,
