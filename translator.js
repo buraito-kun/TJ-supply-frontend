@@ -233,9 +233,9 @@ const Translator = {
   },
   actionHistory: { name: "ประวัติการใช้งาน" },
   itemType: { name: "ประเภทสิ่งของ" },
-  order: { name: "สั่งซื้อสินค้า" },
+  order: { name: "สั่งซื้อวัตถุดิบ" },
   picknpay: {
-    name: "เบิก/จ่ายสินค้า",
+    name: "เบิก/จ่ายวัตถุดิบ",
     icon: (
       <svg
         width="30"

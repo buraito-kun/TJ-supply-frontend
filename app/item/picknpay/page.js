@@ -168,7 +168,7 @@ export default function Picknpay() {
                   <BackButton text="ย้อนกลับ" />
                 </Link>
                 <h2 className="ml-20 text-black text-2xl font-bold font-['Sarabun']">
-                  เบิก/จ่ายสินค้า
+                  เบิก/จ่ายวัตถุดิบ
                 </h2>
               </div>
               {role && (role[0] === "m" || role[1] === "s") && (
@@ -182,12 +182,12 @@ export default function Picknpay() {
             <div className="flex flex-col w-full mt-[50px]">
               <div className="flex flex-row w-full place-items-center">
                 <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
-                  รายการสิ่งของในระบบ
+                  รายการวัตถุดิบในระบบ
                 </h2>
                 <input
                   className="h-[50px] w-[700px] border border-black mt-1 ml-10 px-3 text-2xl font-normal font-['Sarabun'] rounded-md text-black"
                   type="text"
-                  placeholder="ค้นหาจากชื่อสินค้า หรือวัตถุดิบ"
+                  placeholder="ค้นหาจากชื่อวัตถุดิบ"
                   onChange={(e) => setLike(e.target.value)}
                 />
               </div>
@@ -235,7 +235,7 @@ export default function Picknpay() {
               }
               <div className="flex flex-row w-full place-items-center">
                 <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
-                  คำขอการเบิกสินค้า
+                  คำขอการเบิกวัตถุดิบ
                 </h2>
               </div>
               <div className="ml-10 mr-20 mt-10 flex flex-col place-content-center border border-[#cecece] rounded-xl">
@@ -245,15 +245,15 @@ export default function Picknpay() {
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
                         {role && (role[0] === "m" || role[1] === "s") ? (
                           <div className="w-4/12 text-center text-lg font-bold font-['Sarabun']">
-                            ชื่อสินค้า
+                            ชื่อวัตถุดิบ
                           </div>
                         ) : (
                           <div className="w-6/12 text-center text-lg font-bold font-['Sarabun']">
-                            ชื่อสินค้า
+                            ชื่อวัตถุดิบ
                           </div>
                         )}
                         <div className="w-3/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้ขอเบิกสินค้า
+                          ชื่อผู้ขอเบิกวัตถุดิบ
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           จำนวน
@@ -447,7 +447,7 @@ export default function Picknpay() {
               }
               <div className="flex flex-row w-full place-items-center">
                 <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
-                  ประวัติการเบิก/จ่ายสินค้าที่สำเร็จ
+                  ประวัติการเบิก/จ่ายวัตถุดิบที่สำเร็จ
                 </h2>
               </div>
               <div className="ml-10 mr-20 mt-10 flex flex-col place-content-center border border-[#cecece] rounded-xl">
@@ -456,13 +456,13 @@ export default function Picknpay() {
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
                         <div className="w-3/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อสินค้า
+                          ชื่อวัตถุดิบ
                         </div>
                         <div className="w-3/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้ขอเบิกสินค้า
+                          ชื่อผู้ขอเบิกวัตถุดิบ
                         </div>
                         <div className="w-3/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อผู้จ่ายสินค้า
+                          ชื่อผู้จ่ายวัตถุดิบ
                         </div>
                         <div className="w-1/12 text-center text-lg font-bold font-['Sarabun']">
                           จำนวน

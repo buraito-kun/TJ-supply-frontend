@@ -199,7 +199,7 @@ export default function OrderItem() {
                   <BackButton text="ย้อนกลับ" />
                 </Link>
                 <h2 className="ml-20 text-black text-2xl font-bold font-['Sarabun']">
-                  สั่งซื้อสิ่งของเข้าคลังสินค้า
+                  สั่งซื้อวัตถุดิบเข้าคลังสินค้า
                 </h2>
               </div>
               <div className="pr-20">
@@ -211,12 +211,12 @@ export default function OrderItem() {
             <div className="flex flex-col w-full mt-[50px]">
               <div className="flex flex-row w-full place-items-center">
                 <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
-                  รายการสิ่งของในระบบ
+                  รายการวัตถุดิบในระบบ
                 </h2>
                 <input
                   className="h-[50px] w-[700px] border border-black mt-1 ml-10 px-3 text-2xl font-normal font-['Sarabun'] rounded-md text-black"
                   type="text"
-                  placeholder="ค้นหาจากชื่อสินค้า หรือวัตถุดิบ"
+                  placeholder="ค้นหาจากชื่อวัตถุดิบ"
                   onChange={(e) => setLike(e.target.value)}
                 />
               </div>
@@ -273,7 +273,7 @@ export default function OrderItem() {
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
                         <div className="w-4/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อสินค้า
+                          ชื่อวัตถุดิบ
                         </div>
                         <div className="w-3/12 text-center text-lg font-bold font-['Sarabun']">
                           ชื่อผู้ขอซื้อ
@@ -461,7 +461,7 @@ export default function OrderItem() {
               }
               <div className="flex flex-row w-full place-items-center">
                 <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
-                  รอการยืนยันได้รับสินค้า
+                  รอการยืนยันได้รับวัตถุดิบ
                 </h2>
               </div>
               <div className="ml-10 mr-20 mt-10 flex flex-col place-content-center border border-[#cecece] rounded-xl">
@@ -470,7 +470,7 @@ export default function OrderItem() {
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
                         <div className="w-4/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อสินค้า
+                          ชื่อวัตถุดิบ
                         </div>
                         <div className="w-3/12 text-center text-lg font-bold font-['Sarabun']">
                           ชื่อผู้ขอซื้อ
@@ -615,7 +615,7 @@ export default function OrderItem() {
               }
               <div className="flex flex-row w-full place-items-center">
                 <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
-                  ประวัติการสั่งซื้อสินค้า
+                  ประวัติการสั่งซื้อวัตถุดิบ
                 </h2>
               </div>
               <div className="ml-10 mr-20 mt-10 flex flex-col place-content-center border border-[#cecece] rounded-xl">
@@ -624,7 +624,7 @@ export default function OrderItem() {
                     <div className="text-black font-bold">
                       <div className="bg-[#6494d3] rounded-t-3xl flex flex-row h-10 place-items-center">
                         <div className="w-4/12 text-center text-lg font-bold font-['Sarabun']">
-                          ชื่อสินค้า
+                          ชื่อวัตถุดิบ
                         </div>
                         <div className="w-3/12 text-center text-lg font-bold font-['Sarabun']">
                           ชื่อผู้ขอซื้อ

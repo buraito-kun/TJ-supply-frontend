@@ -100,12 +100,12 @@ export default function AddOrderItem({ params }) {
                 <BackButton text="ย้อนกลับ" />
               </Link>
               <h2 className="ml-20 text-black text-2xl font-bold font-['Sarabun']">
-                สั่งซื้อสินค้า
+                สั่งซื้อวัตถุดิบ
               </h2>
             </div>
             <div className="flex flex-row w-full place-items-center mt-10">
               <h2 className="ml-40 text-black text-xl font-normal font-['Sarabun']">
-                สร้างใบสั่งซื้อสินค้า
+                สร้างใบสั่งซื้อวัตถุดิบ
               </h2>
             </div>
             <div className="flex flex-col w-full mt-10 place-items-center">
@@ -113,13 +113,13 @@ export default function AddOrderItem({ params }) {
                 <div className="flex flex-col w-full place-items-center">
                   <label className="w-2/3 mr-5 flex flex-col">
                     <h4 className="text-xl text-black font-normal font-['Sarabun']">
-                      ชื่อประเภทสิ่งของ
+                      ชื่อวัตถุดิบ
                     </h4>
                     <input
                       type="text"
                       className="h-[50px] border border-black px-3 text-black text-2xl font-normal font-['Sarabun'] rounded-md hover:cursor-not-allowed"
                       value={item?.data?.name}
-                      placeholder="ชื่อประเภทสิ่งของ"
+                      placeholder="ชื่อวัตถุดิบ"
                       disabled
                     />
                   </label>
